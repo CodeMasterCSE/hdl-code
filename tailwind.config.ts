@@ -32,6 +32,34 @@ export default {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
 				},
+        circuit: {
+          // Circuit-inspired blues
+          blue: {
+            50: '#e6f1ff',
+            100: '#cce3ff',
+            200: '#99c7ff',
+            300: '#66abff',
+            400: '#3390ff',
+            500: '#0074ff',
+            600: '#005dcc',
+            700: '#004699',
+            800: '#003066',
+            900: '#001b33',
+          },
+          // Circuit board greens
+          green: {
+            50: '#e6ffee',
+            100: '#ccfedd',
+            200: '#99fdbc',
+            300: '#66fb9a',
+            400: '#33fa79',
+            500: '#00f957',
+            600: '#00c746',
+            700: '#009534',
+            800: '#006423',
+            900: '#003211',
+          },
+        },
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
