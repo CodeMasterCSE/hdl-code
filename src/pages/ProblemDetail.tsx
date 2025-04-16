@@ -9,6 +9,9 @@ import { sampleProblems, TestCase } from "@/lib/sample-problems";
 import { Separator } from "@/components/ui/separator";
 import { Play, Check, X, AlertCircle, Clock, Terminal, Info } from "lucide-react";
 import Editor from "@monaco-editor/react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 interface RunResult {
   testCaseIndex: number;
@@ -27,6 +30,7 @@ const ProblemDetail = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
   const [activeResultsTab, setActiveResultsTab] = useState("testcases");
+  const { user } = useAuth();
 
   useEffect(() => {
     const foundProblem = sampleProblems.find(p => p.id === id);
@@ -36,16 +40,12 @@ const ProblemDetail = () => {
     }
   }, [id]);
 
-  const runTests = () => {
+  const runTests = async () => {
     setIsRunning(true);
     
     // Simulate test running
-    setTimeout(() => {
-      // This is a simulation - in a real app, this would connect to a backend
-      // that would compile and run the HDL code against test vectors
-      
+    setTimeout(async () => {
       const newResults: RunResult[] = problem.testCases.map((testCase, index) => {
-        // Simulate some random success/failure for demo purposes
         const passed = Math.random() > 0.3;
         
         return {
@@ -64,6 +64,36 @@ const ProblemDetail = () => {
       setResults(newResults);
       setIsRunning(false);
       setActiveResultsTab("results");
+
+      // Check if all tests pass and user is logged in
+      if (newResults.every(r => r.passed) && user) {
+        try {
+          // Insert problem completion record
+          const { error } = await supabase
+            .from('problem_completions')
+            .insert({
+              user_id: user.id,
+              problem_id: problem.id,
+              solution: code
+            });
+
+          // Update user's problems solved count
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({ problems_solved: (user.problems_solved || 0) + 1 })
+            .eq('id', user.id);
+
+          if (!error && !profileError) {
+            toast.success("Congratulations! Problem solved successfully!", {
+              description: `You've completed the ${problem.title} problem.`
+            });
+          } else {
+            console.error("Error tracking problem completion", error, profileError);
+          }
+        } catch (err) {
+          console.error("Error submitting problem completion", err);
+        }
+      }
     }, 1500);
   };
 

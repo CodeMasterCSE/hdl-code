@@ -1,4 +1,3 @@
-
 // Sample HDL problems for the platform
 export interface Problem {
   id: string;
@@ -88,124 +87,168 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p002",
-    title: "4-bit Binary Counter",
-    difficulty: "medium",
-    category: "Sequential Logic",
+    id: "p004",
+    title: "AND Gate Implementation",
+    difficulty: "easy",
+    category: "Logic Gates",
     description: `
-Design a 4-bit binary counter with the following specifications:
-- A clock input (clk)
-- A synchronous reset input (reset)
-- A 4-bit output (count)
+Design a 2-input AND gate using Verilog.
 
-The counter should increment by 1 on each positive edge of the clock. When reset is high, the counter should be reset to 0.
+An AND gate outputs 1 only when both inputs are 1. 
+Otherwise, it outputs 0.
+
+Implement the AND gate with the following specifications:
+- Two inputs (a and b)
+- One output (out)
+
+When a = 1 and b = 1, out should be 1
+When any input is 0, out should be 0
     `,
     constraints: [
       "Use behavioral modeling",
-      "Your module must be named 'counter_4bit'",
-      "Counter should increment on the positive edge of the clock",
-      "Reset should be synchronous (only applied on clock edge)"
+      "Your module must be named 'and_gate'",
+      "Inputs and outputs must be as specified in the description"
     ],
-    starterCode: `module counter_4bit(
-  input clk,
-  input reset,
-  output reg [3:0] count
+    starterCode: `module and_gate(
+  input a,
+  input b,
+  output out
 );
   // Your code here
 
 endmodule`,
     testCases: [
       {
-        inputs: { clk: "posedge", reset: "1" },
-        outputs: { count: "0000" },
-        description: "Counter should reset to 0 when reset is high"
+        inputs: { a: "0", b: "0" },
+        outputs: { out: "0" },
+        description: "If a=0, b=0, then out should be 0"
       },
       {
-        inputs: { clk: "posedge", reset: "0" },
-        outputs: { count: "0001" },
-        description: "Counter should increment to 1 after reset"
+        inputs: { a: "1", b: "0" },
+        outputs: { out: "0" },
+        description: "If a=1, b=0, then out should be 0"
       },
       {
-        inputs: { clk: "posedge", reset: "0" },
-        outputs: { count: "0010" },
-        description: "Counter should increment to 2"
-      },
-      {
-        inputs: { clk: "posedge after 1111", reset: "0" },
-        outputs: { count: "0000" },
-        description: "Counter should roll over from 15 to 0"
+        inputs: { a: "1", b: "1" },
+        outputs: { out: "1" },
+        description: "If a=1, b=1, then out should be 1"
       }
     ],
-    solution: `module counter_4bit(
-  input clk,
-  input reset,
-  output reg [3:0] count
+    solution: `module and_gate(
+  input a,
+  input b,
+  output reg out
 );
-  always @(posedge clk) begin
-    if (reset)
-      count <= 4'b0000;
-    else
-      count <= count + 1;
+  always @(a or b) begin
+    out = a & b;
   end
 endmodule`
   },
   {
-    id: "p003",
-    title: "Traffic Light Controller",
-    difficulty: "hard",
-    category: "State Machines",
+    id: "p005",
+    title: "OR Gate Implementation",
+    difficulty: "easy",
+    category: "Logic Gates",
     description: `
-Design a simple traffic light controller for a single intersection. The controller should cycle through three states:
-- Green (6 clock cycles)
-- Yellow (3 clock cycles)
-- Red (6 clock cycles)
+Design a 2-input OR gate using Verilog.
 
-Implement this using a finite state machine (FSM) approach.
+An OR gate outputs 1 if at least one input is 1.
+It outputs 0 only when both inputs are 0.
 
-Specifications:
-- Clock input (clk)
-- Reset input (rst)
-- 3-bit output light [2:0], where:
-  - light[2] = Red
-  - light[1] = Yellow
-  - light[0] = Green
+Implement the OR gate with the following specifications:
+- Two inputs (a and b)
+- One output (out)
 
-Only one light should be on at any given time.
+When either a or b is 1, out should be 1
+When both inputs are 0, out should be 0
     `,
     constraints: [
-      "Use a finite state machine approach",
-      "Your module must be named 'traffic_light_controller'",
-      "Follow the timing specifications exactly"
+      "Use behavioral modeling",
+      "Your module must be named 'or_gate'",
+      "Inputs and outputs must be as specified in the description"
     ],
-    starterCode: `module traffic_light_controller(
-  input clk,
-  input rst,
-  output reg [2:0] light
+    starterCode: `module or_gate(
+  input a,
+  input b,
+  output out
 );
   // Your code here
 
 endmodule`,
     testCases: [
       {
-        inputs: { clk: "posedge", rst: "1" },
-        outputs: { light: "001" },
-        description: "Controller should start with Green light after reset"
+        inputs: { a: "0", b: "0" },
+        outputs: { out: "0" },
+        description: "If a=0, b=0, then out should be 0"
       },
       {
-        inputs: { clk: "posedge after 6 cycles", rst: "0" },
-        outputs: { light: "010" },
-        description: "After 6 clock cycles, should change to Yellow"
+        inputs: { a: "1", b: "0" },
+        outputs: { out: "1" },
+        description: "If a=1, b=0, then out should be 1"
       },
       {
-        inputs: { clk: "posedge after 3 cycles", rst: "0" },
-        outputs: { light: "100" },
-        description: "After 3 more clock cycles, should change to Red"
-      },
-      {
-        inputs: { clk: "posedge after 6 cycles", rst: "0" },
-        outputs: { light: "001" },
-        description: "After 6 more clock cycles, should change back to Green"
+        inputs: { a: "1", b: "1" },
+        outputs: { out: "1" },
+        description: "If a=1, b=1, then out should be 1"
       }
-    ]
+    ],
+    solution: `module or_gate(
+  input a,
+  input b,
+  output reg out
+);
+  always @(a or b) begin
+    out = a | b;
+  end
+endmodule`
+  },
+  {
+    id: "p006",
+    title: "NOT Gate Implementation",
+    difficulty: "easy",
+    category: "Logic Gates",
+    description: `
+Design a NOT gate (inverter) using Verilog.
+
+A NOT gate outputs the opposite of its input.
+- When input is 0, output should be 1
+- When input is 1, output should be 0
+
+Implement the NOT gate with the following specifications:
+- One input (a)
+- One output (out)
+    `,
+    constraints: [
+      "Use behavioral modeling",
+      "Your module must be named 'not_gate'",
+      "Inputs and outputs must be as specified in the description"
+    ],
+    starterCode: `module not_gate(
+  input a,
+  output out
+);
+  // Your code here
+
+endmodule`,
+    testCases: [
+      {
+        inputs: { a: "0" },
+        outputs: { out: "1" },
+        description: "If a=0, out should be 1"
+      },
+      {
+        inputs: { a: "1" },
+        outputs: { out: "0" },
+        description: "If a=1, out should be 0"
+      }
+    ],
+    solution: `module not_gate(
+  input a,
+  output reg out
+);
+  always @(a) begin
+    out = ~a;
+  end
+endmodule`
   }
 ];
