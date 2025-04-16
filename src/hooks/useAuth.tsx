@@ -1,8 +1,13 @@
 
 import { useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+
+// Extend the Supabase User type to include our custom fields
+export interface User extends SupabaseUser {
+  problems_solved?: number;
+}
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -15,7 +20,7 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
-        setUser(session?.user ?? null);
+        setUser(session?.user as User ?? null);
         setLoading(false);
       }
     );
@@ -23,7 +28,7 @@ export function useAuth() {
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
+      setUser(session?.user as User ?? null);
       setLoading(false);
     });
 
