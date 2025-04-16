@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import NavBar from "@/components/NavBar";
-import { sampleProblems } from "@/lib/sample-problems";
+import { sampleProblems } from "@/lib/problems";
 import { SearchIcon, FilterIcon, TagIcon } from "lucide-react";
 
 const Problems = () => {

@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import NavBar from "@/components/NavBar";
-import { sampleProblems, TestCase } from "@/lib/sample-problems";
+import { sampleProblems, TestCase } from "@/lib/problems";
 import { Separator } from "@/components/ui/separator";
 import { Play, Check, X, AlertCircle, Clock, Terminal, Info } from "lucide-react";
 import Editor from "@monaco-editor/react";
