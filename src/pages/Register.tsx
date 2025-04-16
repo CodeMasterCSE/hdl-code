@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,10 +18,11 @@ export default function Register() {
   const { user } = useAuth();
 
   // Redirect if already logged in
-  if (user) {
-    navigate("/");
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +38,8 @@ export default function Register() {
       setLoading(false);
     }
   };
+
+  if (user) return null;
 
   return (
     <div className="container flex items-center justify-center min-h-screen py-10">
@@ -87,6 +90,11 @@ export default function Register() {
             Already have an account?{" "}
             <Link to="/login" className="text-primary hover:underline">
               Sign in
+            </Link>
+          </p>
+          <p className="mt-2 text-center">
+            <Link to="/" className="text-sm text-muted-foreground hover:underline">
+              Back to Home
             </Link>
           </p>
         </CardContent>

@@ -11,9 +11,26 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { CircuitBoard, BookOpen, PuzzleIcon, ChevronDown, Github, BookMarked } from "lucide-react";
+import { CircuitBoard, BookOpen, PuzzleIcon, ChevronDown, Github, BookMarked, User, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { signOut } from "@/lib/auth";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Successfully logged out");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="border-b bg-background sticky top-0 z-50">
       <div className="container flex h-16 items-center px-4 sm:px-6">
@@ -83,6 +100,17 @@ const NavBar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+            
+            {user && (
+              <NavigationMenuItem>
+                <Link to="/dashboard">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <User className="mr-2 h-4 w-4" />
+                    Dashboard
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
         
@@ -99,13 +127,26 @@ const NavBar = () => {
             </Button>
           </a>
           
-          <Link to="/login">
-            <Button variant="outline">Sign In</Button>
-          </Link>
-          
-          <Link to="/register">
-            <Button>Register</Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard">
+                <Button variant="outline">Dashboard</Button>
+              </Link>
+              <Button onClick={handleSignOut} variant="ghost">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="outline">Sign In</Button>
+              </Link>
+              <Link to="/register">
+                <Button>Register</Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
