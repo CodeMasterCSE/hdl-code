@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -345,7 +344,7 @@ const ProblemDetail = () => {
                                   <p className="text-xs font-medium text-gray-500 mb-1">Expected</p>
                                   <div className="font-mono bg-white dark:bg-gray-800 p-1.5 rounded text-xs">
                                     {Object.entries(result.expected).map(([key, value]) => (
-                                      <div key={key}>{key}: {value}</div>
+                                      <div key={key}>{key}: {String(value)}</div>
                                     ))}
                                   </div>
                                 </div>
@@ -354,7 +353,7 @@ const ProblemDetail = () => {
                                   <p className="text-xs font-medium text-gray-500 mb-1">Actual</p>
                                   <div className="font-mono bg-white dark:bg-gray-800 p-1.5 rounded text-xs">
                                     {Object.entries(result.actual).map(([key, value]) => (
-                                      <div key={key}>{key}: {value}</div>
+                                      <div key={key}>{key}: {String(value)}</div>
                                     ))}
                                   </div>
                                 </div>
