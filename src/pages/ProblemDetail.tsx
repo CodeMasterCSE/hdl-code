@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -23,8 +24,9 @@ interface RunResult {
 
 const ProblemDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [code, setCode] = useState("");
-  const [problem, setProblem] = useState(sampleProblems[0]);
+  const [problem, setProblem] = useState(null);
   const [results, setResults] = useState<RunResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
@@ -32,14 +34,23 @@ const ProblemDetail = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    // Find the problem based on the ID from the URL
     const foundProblem = sampleProblems.find(p => p.id === id);
+    
     if (foundProblem) {
+      console.log("Problem found:", foundProblem.id);
       setProblem(foundProblem);
       setCode(foundProblem.starterCode);
+    } else {
+      console.log("Problem not found with ID:", id);
+      // Redirect to problems list if problem not found
+      navigate("/problems");
     }
-  }, [id]);
+  }, [id, navigate]);
 
   const runTests = async () => {
+    if (!problem) return;
+    
     setIsRunning(true);
     
     // Simulate test running
@@ -103,7 +114,16 @@ const ProblemDetail = () => {
   }
 
   if (!problem) {
-    return <div>Problem not found</div>;
+    return (
+      <div className="flex min-h-screen flex-col">
+        <NavBar />
+        <div className="container mx-auto px-4 py-8 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Loading problem...</h1>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const passedTests = results.filter(r => r.passed).length;
