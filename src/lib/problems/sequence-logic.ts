@@ -1,4 +1,3 @@
-
 import { Problem } from "../types/problem";
 
 export const sequenceLogicProblems: Problem[] = [
@@ -188,5 +187,159 @@ endmodule`,
       "The detector must recognize overlapping sequences",
       "The output should be high for exactly one clock cycle when the sequence is detected"
     ]
+  },
+  {
+    id: "p014",
+    title: "D Flip-Flop",
+    difficulty: "medium",
+    category: "Sequential Logic",
+    description: `
+Design a D flip-flop using Verilog.
+
+A D flip-flop (Data or Delay flip-flop) is a sequential circuit that stores and outputs the value of its D input at the time of a positive edge of the clock signal.
+
+For this problem, implement a D flip-flop with the following specifications:
+- One data input (d)
+- One clock input (clk)
+- One reset input (reset)
+- One output (q)
+
+When reset is high, q should be set to 0.
+When a positive edge of clk occurs, q should take the value of d.
+    `,
+    constraints: [
+      "Use behavioral modeling",
+      "Your module must be named 'd_flip_flop'",
+      "Inputs and outputs must be as specified in the description",
+      "The flip-flop must be positive-edge triggered",
+      "The reset must be synchronous"
+    ],
+    starterCode: `module d_flip_flop(
+  input d,
+  input clk,
+  input reset,
+  output q
+);
+  // Your code here
+
+endmodule`,
+    testCases: [
+      {
+        inputs: { d: "1", clk: "0→1", reset: "0" },
+        outputs: { q: "0→1" },
+        description: "Basic D flip-flop operation with d=1"
+      },
+      {
+        inputs: { d: "0", clk: "0→1", reset: "0" },
+        outputs: { q: "1→0" },
+        description: "Basic D flip-flop operation with d=0"
+      },
+      {
+        inputs: { d: "1", clk: "0→1", reset: "1" },
+        outputs: { q: "x→0" },
+        description: "Reset operation"
+      },
+      {
+        inputs: { d: "1→0", clk: "0", reset: "0" },
+        outputs: { q: "1→1" },
+        description: "No change when clock doesn't toggle"
+      },
+      {
+        inputs: { d: "0→1→0", clk: "0→1→0→1", reset: "0" },
+        outputs: { q: "0→1→1→0" },
+        description: "Multiple clock edges"
+      }
+    ],
+    solution: `module d_flip_flop(
+  input d,
+  input clk,
+  input reset,
+  output reg q
+);
+  always @(posedge clk) begin
+    if (reset)
+      q <= 0;
+    else
+      q <= d;
+  end
+endmodule`
+  },
+  {
+    id: "p015",
+    title: "T Flip-Flop",
+    difficulty: "medium",
+    category: "Sequential Logic",
+    description: `
+Design a T flip-flop using Verilog.
+
+A T flip-flop (Toggle flip-flop) is a sequential circuit that toggles its output when T=1 and maintains its previous output when T=0.
+
+For this problem, implement a T flip-flop with the following specifications:
+- One toggle input (t)
+- One clock input (clk)
+- One reset input (reset)
+- One output (q)
+
+When reset is high, q should be set to 0.
+When a positive edge of clk occurs and t=1, q should toggle (invert).
+When a positive edge of clk occurs and t=0, q should maintain its value.
+    `,
+    constraints: [
+      "Use behavioral modeling",
+      "Your module must be named 't_flip_flop'",
+      "Inputs and outputs must be as specified in the description",
+      "The flip-flop must be positive-edge triggered",
+      "The reset must be synchronous"
+    ],
+    starterCode: `module t_flip_flop(
+  input t,
+  input clk,
+  input reset,
+  output q
+);
+  // Your code here
+
+endmodule`,
+    testCases: [
+      {
+        inputs: { t: "1", clk: "0→1", reset: "0" },
+        outputs: { q: "0→1" },
+        description: "Toggle with t=1"
+      },
+      {
+        inputs: { t: "1", clk: "0→1→0→1", reset: "0" },
+        outputs: { q: "0→1→1→0" },
+        description: "Multiple toggles with t=1"
+      },
+      {
+        inputs: { t: "0", clk: "0→1", reset: "0" },
+        outputs: { q: "1→1" },
+        description: "Hold with t=0"
+      },
+      {
+        inputs: { t: "1", clk: "0→1", reset: "1" },
+        outputs: { q: "x→0" },
+        description: "Reset operation"
+      },
+      {
+        inputs: { t: "1→0→1", clk: "0→1→0→1→0→1", reset: "0" },
+        outputs: { q: "0→1→1→1→1→0" },
+        description: "Mixed toggle and hold operations"
+      }
+    ],
+    solution: `module t_flip_flop(
+  input t,
+  input clk,
+  input reset,
+  output reg q
+);
+  always @(posedge clk) begin
+    if (reset)
+      q <= 0;
+    else if (t)
+      q <= ~q;
+    // else q remains unchanged
+  end
+endmodule`
   }
 ];
