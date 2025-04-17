@@ -1,7 +1,8 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Info } from "lucide-react";
-import { RunResult, TestCase } from "@/lib/problems";
+import { TestCase } from "@/lib/problems";
+import { RunResult } from "@/types/problem";
 import ResultsDisplay from "./ResultsDisplay";
 import ConsoleOutput from "./ConsoleOutput";
 
