@@ -71,14 +71,11 @@ endmodule`}
                 <Code className="h-7 w-7 text-blue-600" />
               </div>
               <h3 className="text-lg font-bold">Practice HDL Coding</h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                Write Verilog, VHDL, and SystemVerilog code to implement digital circuits in our 
-                interactive coding environment.
-              </p>
+              <p className="text-gray-500 dark:text-gray-400">Write Verilog, VHDL, and System Verilog code to implement digital circuits in our interactive coding environment.</p>
             </div>
             <div className="flex flex-col gap-2">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900">
-                <Cpu className="h-5 w-5 text-blue-600" />
+                <Cpu className="h-7 w-7 text-blue-600" />
               </div>
               <h3 className="text-lg font-bold">Diverse Problem Sets</h3>
               <p className="text-gray-500 dark:text-gray-400">
@@ -88,7 +85,7 @@ endmodule`}
             </div>
             <div className="flex flex-col gap-2">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900">
-                <CheckCircle2 className="h-5 w-5 text-blue-600" />
+                <CheckCircle2 className="h-7 w-7 text-blue-600" />
               </div>
               <h3 className="text-lg font-bold">Instant Verification</h3>
               <p className="text-gray-500 dark:text-gray-400">
@@ -108,13 +105,13 @@ endmodule`}
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
                 Ready to improve your HDL skills?
               </h2>
-              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Join our community of hardware designers and level up your digital circuit design expertise.
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Link to="/register">
-                <Button size="lg" className="gap-1.5">
+                <Button size="lg" className="gap-1.5 text-white text-center rounded-sm">
                   Get Started
                   <Zap className="h-4 w-4" />
                 </Button>
