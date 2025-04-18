@@ -27,12 +27,15 @@ interface ProblemStats {
   total: number;
 }
 
+// Update interface to match the actual data structure from Supabase
 interface ProblemCompletion {
   id: string;
   user_id: string;
   problem_id: string;
-  created_at: string;
-  difficulty: string;
+  completed_at?: string;
+  solution?: string;
+  created_at?: string;
+  difficulty?: string;
   problems?: {
     id: string;
     title: string;
@@ -116,11 +119,12 @@ export default function Dashboard() {
         .from('problem_completions')
         .select('*, problems:problem_id(*)')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .order('completed_at', { ascending: false })
         .limit(5);
 
       if (!error && data) {
-        setRecentCompletions(data as ProblemCompletion[]);
+        // Convert to our expected type with a type assertion
+        setRecentCompletions(data as unknown as ProblemCompletion[]);
       }
     } catch (error) {
       console.error("Error fetching recent completions:", error);
@@ -135,6 +139,7 @@ export default function Dashboard() {
     );
   }
 
+  // Helper function to get initials
   const getInitials = (name: string) => {
     return name
       ? name
@@ -495,17 +500,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-// Helper function to get user initials
-function getInitials(name: string) {
-  return name
-    ? name
-        .split(' ')
-        .map(part => part[0])
-        .join('')
-        .toUpperCase()
-    : 'U';
-}
-
-const fullName = user?.user_metadata?.full_name || '';
-const email = user?.email || '';
