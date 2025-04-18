@@ -1,7 +1,7 @@
 
 import { Problem } from '../types/problem';
 import { logicGateProblems } from './logic-gates';
-import { combinationalLogicProblems } from './combinational-logic';
+import { combinationalLogicProblems } from './combinational';
 import { sequenceLogicProblems } from './sequence-logic';
 import { logicGatesBeginnersProblems } from './logic-gates-beginners';
 import { arithmeticCircuitsProblems } from './arithmetic-circuits';
