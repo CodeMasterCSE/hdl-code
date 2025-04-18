@@ -1,2 +1,1 @@
-
-export { RunResult } from '@/lib/types/problem';
+export type { RunResult } from '@/lib/types/problem';
