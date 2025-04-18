@@ -29,18 +29,23 @@ export const useProblemStats = (user: User | null) => {
       try {
         const { data: allCompletions } = await supabase
           .from('problem_completions')
-          .select('*')
+          .select('*, problems:problem_id(difficulty)')
           .eq('user_id', user.id);
 
-        const beginnerCount = allCompletions?.filter(comp => comp.difficulty === 'Beginner').length || 0;
-        const intermediateCount = allCompletions?.filter(comp => comp.difficulty === 'Intermediate').length || 0;
-        const advancedCount = allCompletions?.filter(comp => comp.difficulty === 'Advanced').length || 0;
+        if (!allCompletions) {
+          setLoading(false);
+          return;
+        }
+
+        const beginnerCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Beginner').length || 0;
+        const intermediateCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Intermediate').length || 0;
+        const advancedCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Advanced').length || 0;
         
         setStats({
           beginner: beginnerCount,
           intermediate: intermediateCount,
           advanced: advancedCount,
-          total: allCompletions?.length || 0
+          total: allCompletions.length || 0
         });
       } catch (error) {
         console.error("Error fetching problem stats:", error);
