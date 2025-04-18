@@ -1,12 +1,9 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import { CircuitBoard, Code, Zap, CheckCircle2, ArrowRight, Cpu } from "lucide-react";
-
 const Index = () => {
-  return (
-    <div className="flex min-h-screen flex-col">
+  return <div className="flex min-h-screen flex-col">
       <NavBar />
       
       {/* Hero Section */}
@@ -42,7 +39,7 @@ const Index = () => {
                 <div className="absolute inset-0 bg-blue-500/10 rounded-lg border border-blue-200 dark:border-blue-800 overflow-hidden">
                   <div className="p-4 font-mono text-xs text-blue-700 dark:text-blue-300 h-full overflow-auto">
                     <pre>
-{`module counter_4bit(
+                    {`module counter_4bit(
   input clk,
   input reset,
   output reg [3:0] count
@@ -71,7 +68,7 @@ endmodule`}
           <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">
             <div className="flex flex-col gap-2">
               <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900">
-                <Code className="h-5 w-5 text-blue-600" />
+                <Code className="h-7 w-7 text-blue-600" />
               </div>
               <h3 className="text-lg font-bold">Practice HDL Coding</h3>
               <p className="text-gray-500 dark:text-gray-400">
@@ -143,19 +140,12 @@ endmodule`}
             <Link to="/contact" className="text-sm hover:underline underline-offset-4">
               Contact
             </Link>
-            <a 
-              href="https://github.com/hdlcode/hdlcode" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm hover:underline underline-offset-4"
-            >
+            <a href="https://github.com/hdlcode/hdlcode" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4">
               GitHub
             </a>
           </nav>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
