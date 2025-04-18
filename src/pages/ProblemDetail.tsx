@@ -10,10 +10,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { RunResult } from "@/types/problem";
 
-// Import our new components
+// Import our components
 import CodeEditor from "@/components/problems/CodeEditor";
 import ProblemDescription from "@/components/problems/ProblemDescription";
 import ResultsPanel from "@/components/problems/ResultsPanel";
+import SuccessModal from "@/components/problems/SuccessModal";
+import FailureModal from "@/components/problems/FailureModal";
 
 const ProblemDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +26,20 @@ const ProblemDetail = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
   const [activeResultsTab, setActiveResultsTab] = useState("testcases");
-  const { user } = useAuth();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFailureModal, setShowFailureModal] = useState(false);
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    // Check if user is authenticated after auth state is loaded
+    if (!loading && !user) {
+      toast.error("Please sign in to run code and solve problems", {
+        description: "You'll be redirected to the login page."
+      });
+      // Redirect to login page
+      navigate("/login", { state: { redirectTo: `/problem/${id}` } });
+    }
+  }, [user, loading, navigate, id]);
 
   useEffect(() => {
     // Find the problem based on the ID from the URL
@@ -43,6 +58,15 @@ const ProblemDetail = () => {
 
   const runTests = async () => {
     if (!problem) return;
+    
+    // Check if user is authenticated
+    if (!user) {
+      toast.error("Please sign in to run code", {
+        description: "You'll be redirected to the login page."
+      });
+      navigate("/login", { state: { redirectTo: `/problem/${id}` } });
+      return;
+    }
     
     setIsRunning(true);
     
@@ -68,34 +92,40 @@ const ProblemDetail = () => {
       setIsRunning(false);
       setActiveResultsTab("results");
 
-      // Check if all tests pass and user is logged in
-      if (newResults.every(r => r.passed) && user) {
-        try {
-          // Insert problem completion record
-          const { error } = await supabase
-            .from('problem_completions')
-            .insert({
-              user_id: user.id,
-              problem_id: problem.id,
-              solution: code
-            });
+      // Check if all tests pass
+      const allTestsPassed = newResults.every(r => r.passed);
+      
+      if (allTestsPassed) {
+        setShowSuccessModal(true);
+        
+        // Insert problem completion record if user is logged in
+        if (user) {
+          try {
+            // Insert problem completion record
+            const { error } = await supabase
+              .from('problem_completions')
+              .insert({
+                user_id: user.id,
+                problem_id: problem.id,
+                solution: code,
+                difficulty: problem.difficulty
+              });
 
-          // Update user's problems solved count
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .update({ problems_solved: (user.problems_solved || 0) + 1 })
-            .eq('id', user.id);
+            // Update user's problems solved count
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .update({ problems_solved: (user.problems_solved || 0) + 1 })
+              .eq('id', user.id);
 
-          if (!error && !profileError) {
-            toast.success("Congratulations! Problem solved successfully!", {
-              description: `You've completed the ${problem.title} problem.`
-            });
-          } else {
-            console.error("Error tracking problem completion", error, profileError);
+            if (error || profileError) {
+              console.error("Error tracking problem completion", error, profileError);
+            }
+          } catch (err) {
+            console.error("Error submitting problem completion", err);
           }
-        } catch (err) {
-          console.error("Error submitting problem completion", err);
         }
+      } else {
+        setShowFailureModal(true);
       }
     }, 1500);
   };
@@ -186,6 +216,23 @@ const ProblemDetail = () => {
           </div>
         </div>
       </div>
+      
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <SuccessModal 
+          onClose={() => setShowSuccessModal(false)}
+          problem={problem}
+        />
+      )}
+      
+      {/* Failure Modal */}
+      {showFailureModal && (
+        <FailureModal 
+          onClose={() => setShowFailureModal(false)}
+          passedTests={passedTests}
+          totalTests={totalTests}
+        />
+      )}
     </div>
   );
 };

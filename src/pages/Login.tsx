@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,13 +15,17 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const location = useLocation();
+  
+  // Get redirect path from location state
+  const redirectPath = location.state?.redirectTo || "/dashboard";
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      navigate(redirectPath);
     }
-  }, [user, navigate]);
+  }, [user, navigate, redirectPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +34,7 @@ export default function Login() {
     try {
       await signIn(email, password);
       toast.success("Successfully logged in!");
-      navigate("/dashboard");
+      navigate(redirectPath);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -75,7 +79,11 @@ export default function Login() {
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/register" className="text-primary hover:underline">
+            <Link 
+              to="/register" 
+              state={{ redirectTo: redirectPath }}
+              className="text-primary hover:underline"
+            >
               Register
             </Link>
           </p>
