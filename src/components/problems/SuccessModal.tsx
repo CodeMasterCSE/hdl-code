@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, Trophy, ChevronRight } from 'lucide-react';
+import { CheckCircle, Trophy, ChevronRight, Sparkles, Award } from 'lucide-react';
 
 interface SuccessModalProps {
   onClose: () => void;
@@ -27,11 +27,15 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, problem }) => {
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <div className="flex flex-col items-center justify-center p-6 text-center">
-          <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center mb-6 animate-bounce">
-            <CheckCircle className="h-16 w-16 text-green-600" />
+          <div className="relative">
+            <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center mb-6 animate-bounce">
+              <CheckCircle className="h-16 w-16 text-green-600" />
+            </div>
+            <Sparkles className="h-6 w-6 text-yellow-500 absolute -top-2 -right-2 animate-pulse" />
+            <Sparkles className="h-6 w-6 text-yellow-500 absolute -bottom-2 -left-2 animate-pulse" />
           </div>
           
-          <h2 className="text-2xl font-bold mb-2">Great job!</h2>
+          <h2 className="text-2xl font-bold mb-2">Excellent Work!</h2>
           <p className="text-xl mb-6">
             You've successfully solved the <span className="font-medium">{problem.title}</span> problem!
           </p>
@@ -42,6 +46,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, problem }) => {
               {problem.difficulty === 'Beginner' ? '10' : 
                problem.difficulty === 'Intermediate' ? '20' : '30'} points earned
             </span>
+            <Award className="h-5 w-5 text-blue-500 ml-2" />
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 w-full">

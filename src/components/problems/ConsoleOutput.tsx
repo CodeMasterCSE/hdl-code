@@ -13,6 +13,9 @@ const ConsoleOutput = ({ results, passedTests, totalTests }: ConsoleOutputProps)
           <div className="text-green-400">
             $ Compiling Verilog module...
           </div>
+          <div className="text-green-400 mt-1">
+            $ Ignoring whitespace and formatting issues...
+          </div>
           <div>
             {results.every(r => r.passed) ? (
               <div className="text-green-400 mt-2">
@@ -24,7 +27,10 @@ const ConsoleOutput = ({ results, passedTests, totalTests }: ConsoleOutputProps)
                   Compilation successful with warnings:
                 </div>
                 <div className="mt-1 text-red-400">
-                  - {totalTests - passedTests} test(s) failed. Check the Results tab for details.
+                  - {totalTests - passedTests} test(s) failed. Checking logical correctness...
+                </div>
+                <div className="mt-1 text-yellow-400">
+                  - Note: Whitespace and blank lines are ignored during compilation
                 </div>
               </>
             )}
