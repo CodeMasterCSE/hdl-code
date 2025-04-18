@@ -27,33 +27,20 @@ export const useProblemStats = (user: User | null) => {
 
     const fetchStats = async () => {
       try {
-        const [beginnerData, intermediateData, advancedData, totalData] = await Promise.all([
-          supabase
-            .from('problem_completions')
-            .select('*')
-            .eq('user_id', user.id)
-            .eq('difficulty', 'Beginner'),
-          supabase
-            .from('problem_completions')
-            .select('*')
-            .eq('user_id', user.id)
-            .eq('difficulty', 'Intermediate'),
-          supabase
-            .from('problem_completions')
-            .select('*')
-            .eq('user_id', user.id)
-            .eq('difficulty', 'Advanced'),
-          supabase
-            .from('problem_completions')
-            .select('*')
-            .eq('user_id', user.id)
-        ]);
+        const { data: allCompletions } = await supabase
+          .from('problem_completions')
+          .select('*')
+          .eq('user_id', user.id);
 
+        const beginnerCount = allCompletions?.filter(comp => comp.difficulty === 'Beginner').length || 0;
+        const intermediateCount = allCompletions?.filter(comp => comp.difficulty === 'Intermediate').length || 0;
+        const advancedCount = allCompletions?.filter(comp => comp.difficulty === 'Advanced').length || 0;
+        
         setStats({
-          beginner: beginnerData.data?.length || 0,
-          intermediate: intermediateData.data?.length || 0,
-          advanced: advancedData.data?.length || 0,
-          total: totalData.data?.length || 0
+          beginner: beginnerCount,
+          intermediate: intermediateCount,
+          advanced: advancedCount,
+          total: allCompletions?.length || 0
         });
       } catch (error) {
         console.error("Error fetching problem stats:", error);

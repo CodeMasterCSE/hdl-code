@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -5,12 +6,7 @@ import NavBar from "@/components/NavBar";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { useProblemStats } from "@/hooks/useProblemStats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  PuzzleIcon, 
-  TrophyIcon, 
-  BookOpenIcon, 
-  BarChart,
-} from "lucide-react";
+import { BarChart, PuzzleIcon, TrophyIcon, BookOpenIcon } from "lucide-react";
 import { ProgressTab } from "@/components/dashboard/ProgressTab";
 import { ProblemsTab } from "@/components/dashboard/ProblemsTab";
 import { AchievementsTab } from "@/components/dashboard/AchievementsTab";
