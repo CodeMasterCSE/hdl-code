@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,16 +19,37 @@ import { Button } from "@/components/ui/button";
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts';
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 
+// Define proper types to avoid recursive type issues
+interface ProblemStats {
+  beginner: number;
+  intermediate: number;
+  advanced: number;
+  total: number;
+}
+
+interface ProblemCompletion {
+  id: string;
+  user_id: string;
+  problem_id: string;
+  created_at: string;
+  difficulty: string;
+  problems?: {
+    id: string;
+    title: string;
+    [key: string]: any;
+  };
+}
+
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [problemStats, setProblemStats] = useState({
+  const [problemStats, setProblemStats] = useState<ProblemStats>({
     beginner: 0,
     intermediate: 0,
     advanced: 0,
     total: 0
   });
-  const [recentCompletions, setRecentCompletions] = useState([]);
+  const [recentCompletions, setRecentCompletions] = useState<ProblemCompletion[]>([]);
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
@@ -76,10 +96,10 @@ export default function Dashboard() {
 
       if (!beginnerError && !intermediateError && !advancedError && !totalError) {
         setProblemStats({
-          beginner: beginnerData.length,
-          intermediate: intermediateData.length,
-          advanced: advancedData.length,
-          total: totalData.length
+          beginner: beginnerData?.length || 0,
+          intermediate: intermediateData?.length || 0,
+          advanced: advancedData?.length || 0,
+          total: totalData?.length || 0
         });
       }
 
@@ -100,7 +120,7 @@ export default function Dashboard() {
         .limit(5);
 
       if (!error && data) {
-        setRecentCompletions(data);
+        setRecentCompletions(data as ProblemCompletion[]);
       }
     } catch (error) {
       console.error("Error fetching recent completions:", error);
@@ -380,7 +400,7 @@ export default function Dashboard() {
                       </div>
                     ) : recentCompletions && recentCompletions.length > 0 ? (
                       <div className="space-y-4">
-                        {recentCompletions.map((completion: any) => (
+                        {recentCompletions.map((completion: ProblemCompletion) => (
                           <div 
                             key={completion.id}
                             className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
@@ -475,3 +495,17 @@ export default function Dashboard() {
     </div>
   );
 }
+
+// Helper function to get user initials
+function getInitials(name: string) {
+  return name
+    ? name
+        .split(' ')
+        .map(part => part[0])
+        .join('')
+        .toUpperCase()
+    : 'U';
+}
+
+const fullName = user?.user_metadata?.full_name || '';
+const email = user?.email || '';
