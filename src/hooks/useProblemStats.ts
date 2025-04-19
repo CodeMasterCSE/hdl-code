@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from './useAuth';
+import { ProblemCompletion } from '@/types/dashboard';
 
 export interface ProblemStats {
   beginner: number;
@@ -27,25 +28,38 @@ export const useProblemStats = (user: User | null) => {
 
     const fetchStats = async () => {
       try {
-        const { data: allCompletions } = await supabase
+        const { data: completions, error } = await supabase
           .from('problem_completions')
-          .select('*, problems:problem_id(difficulty)')
+          .select('*')
           .eq('user_id', user.id);
 
-        if (!allCompletions) {
+        if (error) {
+          console.error("Error fetching problem stats:", error);
           setLoading(false);
           return;
         }
 
-        const beginnerCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Beginner').length || 0;
-        const intermediateCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Intermediate').length || 0;
-        const advancedCount = allCompletions.filter(comp => comp.problems?.difficulty === 'Advanced').length || 0;
+        if (!completions) {
+          setLoading(false);
+          return;
+        }
+
+        // Since we can't directly join with the problem difficulty,
+        // we'll count based on the saved difficulty value
+        const beginnerCount = completions.filter(comp => 
+          comp.difficulty === 'easy' || comp.difficulty === 'Beginner').length;
+          
+        const intermediateCount = completions.filter(comp => 
+          comp.difficulty === 'medium' || comp.difficulty === 'Intermediate').length;
+          
+        const advancedCount = completions.filter(comp => 
+          comp.difficulty === 'hard' || comp.difficulty === 'Advanced').length;
         
         setStats({
           beginner: beginnerCount,
           intermediate: intermediateCount,
           advanced: advancedCount,
-          total: allCompletions.length || 0
+          total: completions.length
         });
       } catch (error) {
         console.error("Error fetching problem stats:", error);

@@ -10,6 +10,7 @@ export interface ProblemCompletion {
   problems?: {
     id: string;
     title: string;
+    difficulty?: string;
     [key: string]: any;
   };
 }
