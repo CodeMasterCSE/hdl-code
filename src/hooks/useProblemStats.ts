@@ -44,22 +44,25 @@ export const useProblemStats = (user: User | null) => {
           return;
         }
 
+        // Get typed completions
+        const typedCompletions = completions as unknown as ProblemCompletion[];
+        
         // Since we can't directly join with the problem difficulty,
         // we'll count based on the saved difficulty value
-        const beginnerCount = completions.filter(comp => 
+        const beginnerCount = typedCompletions.filter(comp => 
           comp.difficulty === 'easy' || comp.difficulty === 'Beginner').length;
           
-        const intermediateCount = completions.filter(comp => 
+        const intermediateCount = typedCompletions.filter(comp => 
           comp.difficulty === 'medium' || comp.difficulty === 'Intermediate').length;
           
-        const advancedCount = completions.filter(comp => 
+        const advancedCount = typedCompletions.filter(comp => 
           comp.difficulty === 'hard' || comp.difficulty === 'Advanced').length;
         
         setStats({
           beginner: beginnerCount,
           intermediate: intermediateCount,
           advanced: advancedCount,
-          total: completions.length
+          total: typedCompletions.length
         });
       } catch (error) {
         console.error("Error fetching problem stats:", error);

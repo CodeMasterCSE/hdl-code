@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { RunResult } from "@/types/problem";
+import { compileHDLCode } from "@/services/hdlCompiler";
 
 // Import our components
 import CodeEditor from "@/components/problems/CodeEditor";
@@ -55,15 +56,6 @@ const ProblemDetail = () => {
     }
   }, [id, navigate]);
 
-  // Normalize code by removing whitespace and formatting issues
-  const normalizeCode = (code: string): string => {
-    // Remove comments
-    let normalized = code.replace(/\/\/.*$/gm, '');
-    // Remove line breaks and extra spaces
-    normalized = normalized.replace(/\s+/g, ' ').trim();
-    return normalized;
-  };
-
   const runTests = async () => {
     if (!problem) return;
     
@@ -78,35 +70,17 @@ const ProblemDetail = () => {
     
     setIsRunning(true);
     
-    // Simulate test running with improved logic
-    setTimeout(async () => {
-      // Normalize the user's code to ignore formatting
-      const normalizedUserCode = normalizeCode(code);
+    try {
+      // Use our HDL compiler to compile and evaluate the code
+      const compilationResults = compileHDLCode(code, problem.testCases);
       
-      const newResults: RunResult[] = problem.testCases.map((testCase, index) => {
-        // In a real implementation, we would evaluate the actual code
-        // For now, we'll simulate with a higher pass rate
-        const passed = Math.random() > 0.2;
-        
-        return {
-          testCaseIndex: index,
-          passed,
-          description: testCase.description,
-          expected: testCase.outputs,
-          actual: passed ? testCase.outputs : { 
-            ...testCase.outputs, 
-            [Object.keys(testCase.outputs)[0]]: 
-              testCase.outputs[Object.keys(testCase.outputs)[0]] === "0" ? "1" : "0" 
-          },
-        };
-      });
-      
-      setResults(newResults);
+      // Set the results
+      setResults(compilationResults);
       setIsRunning(false);
       setActiveResultsTab("results");
 
       // Check if all tests pass
-      const allTestsPassed = newResults.every(r => r.passed);
+      const allTestsPassed = compilationResults.every(r => r.passed);
       
       if (allTestsPassed) {
         setShowSuccessModal(true);
@@ -141,7 +115,13 @@ const ProblemDetail = () => {
       } else {
         setShowFailureModal(true);
       }
-    }, 1500);
+    } catch (error) {
+      console.error("Error running tests:", error);
+      toast.error("Error running tests", {
+        description: error instanceof Error ? error.message : "Unknown error occurred."
+      });
+      setIsRunning(false);
+    }
   };
 
   function handleEditorChange(value: string | undefined) {
