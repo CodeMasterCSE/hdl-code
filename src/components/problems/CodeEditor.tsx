@@ -17,10 +17,10 @@ const CodeEditor = ({ code, onChange }: CodeEditorProps) => {
       monaco.languages.register({ id: 'verilog' });
       
       // Register the language's configuration
-      monaco.languages.setMonarchTokensProvider('verilog', hdlLanguageDefinition);
+      monaco.languages.setMonarchTokensProvider('verilog', hdlLanguageDefinition as any);
       
       // Register the theme
-      monaco.editor.defineTheme('hdl-dark', hdlTheme);
+      monaco.editor.defineTheme('hdl-dark', hdlTheme as any);
     });
   }, []);
 

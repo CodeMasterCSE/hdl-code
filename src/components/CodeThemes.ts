@@ -1,7 +1,7 @@
 
 // Monaco editor theme customization for HDL code
 export const hdlTheme = {
-  base: 'vs-dark',
+  base: 'vs-dark' as 'vs-dark',
   inherit: true,
   rules: [
     { token: 'comment', foreground: '6A9955' },
@@ -24,6 +24,7 @@ export const hdlTheme = {
 
 // Custom language definitions for HDL syntax highlighting
 export const hdlLanguageDefinition = {
+  defaultToken: 'invalid',
   keywords: [
     'module', 'endmodule', 'input', 'output', 'inout', 'reg', 'wire', 'always',
     'begin', 'end', 'if', 'else', 'case', 'endcase', 'default', 'posedge', 'negedge',
@@ -42,14 +43,14 @@ export const hdlLanguageDefinition = {
       { include: '@numbers' },
       { include: '@strings' },
       
-      [/[a-zA-Z_]\w*/, {
+      [/[a-zA-Z_]\w*/, { 
         cases: {
           '@keywords': 'keyword',
           '@default': 'identifier'
         }
       }],
       
-      [/@symbols/, {
+      [/@symbols/, { 
         cases: {
           '@operators': 'operator',
           '@default': 'symbol'
