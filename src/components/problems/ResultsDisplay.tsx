@@ -1,5 +1,4 @@
-
-import { Check, X } from "lucide-react";
+import { Check, X, AlertCircle } from "lucide-react";
 import { RunResult } from "@/types/problem";
 
 interface ResultsDisplayProps {
@@ -30,6 +29,44 @@ const ResultsDisplay = ({ results }: ResultsDisplayProps) => {
     );
   }
 
+  // Check if we have syntax or compilation errors
+  const hasErrors = results.some(result => result.error);
+  
+  if (hasErrors) {
+    // Display first error message prominently at the top
+    const firstError = results.find(result => result.error);
+    
+    return (
+      <div className="space-y-3">
+        <div className="p-3 border rounded border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-900/20">
+          <div className="flex items-center mb-2">
+            <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
+            <span className="font-medium">Compilation Error</span>
+          </div>
+          <p className="text-sm mb-2">{firstError?.error}</p>
+          <div className="text-xs text-gray-500 mt-2">
+            <p>Fix the error and try again. Make sure your code syntax is correct.</p>
+          </div>
+        </div>
+        
+        {/* Show individual test results if available */}
+        {results.map((result, index) => (
+          <div
+            key={index}
+            className="p-3 border rounded border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-900/20"
+          >
+            <div className="flex items-center mb-2">
+              <X className="h-5 w-5 text-red-600 mr-2" />
+              <span className="font-medium">Test Case {result.testCaseIndex + 1}</span>
+            </div>
+            <p className="text-sm mb-2">{result.description}</p>
+            <p className="text-sm text-red-500">{result.error || "Failed due to compilation error"}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {results.map((result, index) => (
@@ -52,7 +89,15 @@ const ResultsDisplay = ({ results }: ResultsDisplayProps) => {
 
           <p className="text-sm mb-2">{result.description}</p>
 
-          {!result.passed && result.actual && (
+          {result.error && (
+            <div className="mt-2 mb-2 p-2 bg-red-100 dark:bg-red-900/30 rounded text-xs">
+              <p className="font-medium">Error:</p>
+              <p>{result.error}</p>
+            </div>
+          )}
+
+          {/* Always show the comparison when there's an actual result */}
+          {(result.actual && Object.keys(result.actual).length > 0) && (
             <div className="mt-2 grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-xs font-medium text-gray-500 mb-1">Expected</p>
@@ -67,7 +112,13 @@ const ResultsDisplay = ({ results }: ResultsDisplayProps) => {
                 <p className="text-xs font-medium text-gray-500 mb-1">Actual</p>
                 <div className="font-mono bg-white dark:bg-gray-800 p-1.5 rounded text-xs">
                   {Object.entries(result.actual).map(([key, value]) => (
-                    <div key={key}>{key}: {typeof value === 'string' ? value : String(value)}</div>
+                    <div key={key} className={
+                      result.expected[key] !== value 
+                        ? "text-red-500 font-medium" 
+                        : ""
+                    }>
+                      {key}: {typeof value === 'string' ? value : String(value)}
+                    </div>
                   ))}
                 </div>
               </div>

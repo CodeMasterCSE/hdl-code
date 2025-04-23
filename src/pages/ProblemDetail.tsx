@@ -95,7 +95,6 @@ const ProblemDetail = () => {
                 user_id: user.id,
                 problem_id: problem.id,
                 solution: code,
-                difficulty: problem.difficulty,
                 completed_at: new Date().toISOString()
               });
 

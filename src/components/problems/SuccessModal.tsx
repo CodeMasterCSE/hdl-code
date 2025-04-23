@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, Trophy, ChevronRight, Sparkles, Award } from 'lucide-react';
@@ -26,6 +25,11 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, problem }) => {
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
+        <DialogTitle className="sr-only">Success</DialogTitle>
+        <DialogDescription className="sr-only">
+          You've successfully solved the {problem.title} problem!
+        </DialogDescription>
+        
         <div className="flex flex-col items-center justify-center p-6 text-center">
           <div className="relative">
             <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center mb-6 animate-bounce">
@@ -49,7 +53,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, problem }) => {
             <Award className="h-5 w-5 text-blue-500 ml-2" />
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <div className="flex gap-4 w-full">
             <Button 
               onClick={goToProblems} 
               className="flex-1"

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from './useAuth';
@@ -11,6 +10,19 @@ export interface ProblemStats {
   total: number;
 }
 
+// Temporary sample difficulties for problems
+const SAMPLE_DIFFICULTIES: Record<string, string> = {
+  'lg001': 'beginner',
+  'lg002': 'beginner',
+  'lg003': 'beginner',
+  'p001': 'intermediate',
+  'p004': 'intermediate',
+  'p005': 'intermediate',
+  'p006': 'advanced',
+  'p007': 'advanced',
+  'p009': 'advanced'
+};
+
 export const useProblemStats = (user: User | null) => {
   const [stats, setStats] = useState<ProblemStats>({
     beginner: 0,
@@ -19,59 +31,57 @@ export const useProblemStats = (user: User | null) => {
     total: 0
   });
   const [loading, setLoading] = useState(true);
+  const [completedProblemIds, setCompletedProblemIds] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
     const fetchStats = async () => {
+      if (!user) {
+        setStats({ beginner: 0, intermediate: 0, advanced: 0, total: 0 });
+        setCompletedProblemIds([]);
+        setLoading(false);
+        return;
+      }
+
       try {
         const { data: completions, error } = await supabase
           .from('problem_completions')
-          .select('*')
+          .select('problem_id')
           .eq('user_id', user.id);
 
         if (error) {
-          console.error("Error fetching problem stats:", error);
-          setLoading(false);
+          console.error('Error fetching problem completions:', error);
           return;
         }
 
-        if (!completions) {
-          setLoading(false);
-          return;
-        }
+        const completedIds = completions?.map(c => c.problem_id) || [];
+        setCompletedProblemIds(completedIds);
 
-        // Get typed completions
-        const typedCompletions = completions as unknown as ProblemCompletion[];
-        
-        // Since we can't directly join with the problem difficulty,
-        // we'll count based on the saved difficulty value
-        const beginnerCount = typedCompletions.filter(comp => 
-          comp.difficulty === 'easy' || comp.difficulty === 'Beginner').length;
-          
-        const intermediateCount = typedCompletions.filter(comp => 
-          comp.difficulty === 'medium' || comp.difficulty === 'Intermediate').length;
-          
-        const advancedCount = typedCompletions.filter(comp => 
-          comp.difficulty === 'hard' || comp.difficulty === 'Advanced').length;
-        
-        setStats({
-          beginner: beginnerCount,
-          intermediate: intermediateCount,
-          advanced: advancedCount,
-          total: typedCompletions.length
+        // Count problems by difficulty
+        const difficulties = {
+          beginner: 0,
+          intermediate: 0,
+          advanced: 0,
+          total: 0
+        };
+
+        completedIds.forEach(id => {
+          const difficulty = SAMPLE_DIFFICULTIES[id];
+          if (difficulty) {
+            difficulties[difficulty]++;
+            difficulties.total++;
+          }
         });
+
+        setStats(difficulties);
       } catch (error) {
-        console.error("Error fetching problem stats:", error);
+        console.error('Error in useProblemStats:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchStats();
   }, [user]);
 
-  return { stats, loading };
+  return { stats, loading, completedProblemIds };
 };

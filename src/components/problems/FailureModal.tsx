@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, ArrowLeft, Code, HelpCircle } from 'lucide-react';
 
@@ -14,6 +13,11 @@ const FailureModal: React.FC<FailureModalProps> = ({ onClose, passedTests, total
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
+        <DialogTitle className="sr-only">Test Results</DialogTitle>
+        <DialogDescription className="sr-only">
+          You passed {passedTests} out of {totalTests} tests.
+        </DialogDescription>
+        
         <div className="flex flex-col items-center justify-center p-6 text-center">
           <div className="h-24 w-24 rounded-full bg-red-100 flex items-center justify-center mb-6">
             <AlertTriangle className="h-16 w-16 text-red-600" />

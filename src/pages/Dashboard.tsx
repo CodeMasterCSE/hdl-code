@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,11 +5,14 @@ import NavBar from "@/components/NavBar";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { useProblemStats } from "@/hooks/useProblemStats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, PuzzleIcon, TrophyIcon, BookOpenIcon } from "lucide-react";
+import { BarChart, PuzzleIcon, TrophyIcon, BookOpenIcon, ChevronRight } from "lucide-react";
 import { ProgressTab } from "@/components/dashboard/ProgressTab";
 import { ProblemsTab } from "@/components/dashboard/ProblemsTab";
 import { AchievementsTab } from "@/components/dashboard/AchievementsTab";
 import { CoursesTab } from "@/components/dashboard/CoursesTab";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -34,50 +36,92 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
-      <div className="container py-8">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="md:w-1/3">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Profile Section */}
+          <div className="lg:col-span-1">
             <ProfileCard user={user} problemStats={problemStats} />
           </div>
-          
-          <div className="md:w-2/3">
-            <Tabs defaultValue="progress">
-              <TabsList className="mb-4">
-                <TabsTrigger value="progress">
-                  <BarChart className="h-4 w-4 mr-2" />
+
+          {/* Main Content Section */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Problems</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{problemStats.total}</div>
+                  <Progress value={(problemStats.total / 50) * 100} className="mt-2" />
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Points Earned</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {problemStats.beginner * 10 + problemStats.intermediate * 20 + problemStats.advanced * 30}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">Keep going!</div>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Current Rank</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {problemStats.total >= 10 ? "Expert" : 
+                     problemStats.total >= 5 ? "Pro" : 
+                     problemStats.total >= 1 ? "Beginner" : "-"}
+                  </div>
+                  <Button variant="ghost" size="sm" className="mt-2">
+                    View Leaderboard <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Main Tabs */}
+            <Tabs defaultValue="progress" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="progress" className="flex items-center gap-2">
+                  <BarChart className="h-4 w-4" />
                   Progress
                 </TabsTrigger>
-                <TabsTrigger value="problems">
-                  <PuzzleIcon className="h-4 w-4 mr-2" />
-                  My Problems
+                <TabsTrigger value="problems" className="flex items-center gap-2">
+                  <PuzzleIcon className="h-4 w-4" />
+                  Problems
                 </TabsTrigger>
-                <TabsTrigger value="achievements">
-                  <TrophyIcon className="h-4 w-4 mr-2" />
+                <TabsTrigger value="achievements" className="flex items-center gap-2">
+                  <TrophyIcon className="h-4 w-4" />
                   Achievements
                 </TabsTrigger>
-                <TabsTrigger value="courses">
-                  <BookOpenIcon className="h-4 w-4 mr-2" />
-                  My Courses
+                <TabsTrigger value="courses" className="flex items-center gap-2">
+                  <BookOpenIcon className="h-4 w-4" />
+                  Courses
                 </TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="progress">
+
+              <TabsContent value="progress" className="mt-6">
                 <ProgressTab 
                   statsLoading={statsLoading} 
                   problemStats={problemStats} 
                   navigate={navigate} 
                 />
               </TabsContent>
-              
-              <TabsContent value="problems">
+
+              <TabsContent value="problems" className="mt-6">
                 <ProblemsTab statsLoading={statsLoading} user={user} />
               </TabsContent>
-              
-              <TabsContent value="achievements">
+
+              <TabsContent value="achievements" className="mt-6">
                 <AchievementsTab problemStats={problemStats} />
               </TabsContent>
-              
-              <TabsContent value="courses">
+
+              <TabsContent value="courses" className="mt-6">
                 <CoursesTab />
               </TabsContent>
             </Tabs>

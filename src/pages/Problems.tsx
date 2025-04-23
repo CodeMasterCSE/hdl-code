@@ -18,135 +18,240 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import NavBar from "@/components/NavBar";
 import { sampleProblems } from "@/lib/problems";
-import { SearchIcon, FilterIcon, TagIcon } from "lucide-react";
+import { SearchIcon, FilterIcon, TagIcon, ArrowUpDown, Trophy, Star, Clock, Check } from "lucide-react";
+import { useProblemStats } from "@/hooks/useProblemStats";
+import { useAuth } from "@/hooks/useAuth";
 
 const Problems = () => {
   const [filterDifficulty, setFilterDifficulty] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [sortBy, setSortBy] = useState("difficulty");
+  const { user } = useAuth();
+  const { stats: problemStats, completedProblemIds } = useProblemStats(user);
 
-  const filteredProblems = sampleProblems.filter((problem) => {
-    // Filter by search term
-    const matchesSearch = 
-      problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      problem.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Filter by difficulty
-    const matchesDifficulty = 
-      filterDifficulty === "all" || problem.difficulty === filterDifficulty;
-    
-    // Filter by category (tab)
-    const matchesCategory = 
-      activeTab === "all" || problem.category.toLowerCase().includes(activeTab.toLowerCase());
-    
-    return matchesSearch && matchesDifficulty && matchesCategory;
-  });
+  const filteredProblems = sampleProblems
+    .filter((problem) => {
+      // Filter by search term
+      const matchesSearch = 
+        problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        problem.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Filter by difficulty
+      const matchesDifficulty = 
+        filterDifficulty === "all" || problem.difficulty === filterDifficulty;
+      
+      // Filter by category (tab)
+      const matchesCategory = 
+        activeTab === "all" || problem.category.toLowerCase().includes(activeTab.toLowerCase());
+      
+      return matchesSearch && matchesDifficulty && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "difficulty":
+          const difficultyOrder = { easy: 0, medium: 1, hard: 2 };
+          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+        case "points":
+          const pointsOrder = { easy: 10, medium: 20, hard: 30 };
+          return pointsOrder[b.difficulty] - pointsOrder[a.difficulty];
+        default:
+          return 0;
+      }
+    });
 
   const categories = ["all", ...Array.from(new Set(sampleProblems.map(p => p.category)))];
+  const totalProblems = sampleProblems.length;
+  const solvedProblems = problemStats?.total || 0;
+  const completionPercentage = (solvedProblems / totalProblems) * 100;
 
   return (
     <div className="flex min-h-screen flex-col">
       <NavBar />
       
-      <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col space-y-4">
-          <h1 className="text-3xl font-bold">HDL Practice Problems</h1>
-          <p className="text-gray-500 dark:text-gray-400 max-w-4xl">
-            Improve your hardware description language skills by solving these digital circuit design problems. 
-            Each problem is verified against test cases to ensure your solution works correctly.
-          </p>
-          
-          {/* Search & Filters */}
-          <div className="flex flex-col space-y-4 md:flex-row md:items-center md:space-y-0 md:space-x-4">
-            <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-              <Input
-                placeholder="Search problems..."
-                className="pl-9"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAgMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAxLjc5IDQgNCA0IDQtMS43OSA0LTR6bTI0IDBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAgMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAxLjc5IDQgNCA0IDQtMS43OSA0LTR6bS0yNCAyNGMwLTIuMjEgMS43OS00IDQtNHM0IDEuNzkgNCA0LTEuNzkgNC00IDQtNC0xLjc5LTQtNHptMCAwYzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHptMjQgMGMwLTIuMjEgMS43OS00IDQtNHM0IDEuNzkgNCA0LTEuNzkgNC00IDQtNC0xLjc5LTQtNHptMCAwYzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHoiLz48L2c+PC9nPjwvc3ZnPg==')]"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Left Content - Main Text */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-100 text-sm font-medium">
+                <Trophy className="h-4 w-4 mr-2" />
+                Master HDL Programming
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                Practice Problems for
+                <span className="text-blue-200 block">Hardware Design</span>
+              </h1>
+              
+              <p className="text-xl text-blue-100">
+                Sharpen your hardware description language skills with hands-on practice. Each problem is verified against test cases to ensure your solution works correctly.
+              </p>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <FilterIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-              <Select value={filterDifficulty} onValueChange={setFilterDifficulty}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Difficulty" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Difficulties</SelectItem>
-                  <SelectItem value="easy">Easy</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="hard">Hard</SelectItem>
-                </SelectContent>
-              </Select>
+
+            {/* Right Content - Stats */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2 bg-blue-500/20 px-4 py-3 rounded-lg">
+                  <Trophy className="h-5 w-5 text-blue-200" />
+                  <div>
+                    <div className="text-sm text-blue-200">Solved</div>
+                    <div className="text-xl font-bold">{solvedProblems}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 bg-blue-500/20 px-4 py-3 rounded-lg">
+                  <Star className="h-5 w-5 text-blue-200" />
+                  <div>
+                    <div className="text-sm text-blue-200">Total</div>
+                    <div className="text-xl font-bold">{totalProblems}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 bg-blue-500/20 p-4 rounded-lg">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-blue-200">Progress</span>
+                  <span className="text-blue-200">{Math.round(completionPercentage)}%</span>
+                </div>
+                <div className="relative h-3 bg-blue-500/20 rounded-full overflow-hidden">
+                  <div 
+                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-300 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${completionPercentage}%` }}
+                  >
+                    <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent)] animate-shimmer"></div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-full w-0.5 bg-white/20 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          {/* Category Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-4 w-full justify-start overflow-auto">
-              {categories.map((category) => (
-                <TabsTrigger key={category} value={category} className="capitalize">
-                  {category === "all" ? "All Categories" : category}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            
-            <TabsContent value={activeTab} className="mt-0">
-              {filteredProblems.length > 0 ? (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {filteredProblems.map((problem) => (
-                    <Link to={`/problem/${problem.id}`} key={problem.id}>
-                      <Card className="h-full transition-shadow hover:shadow-md">
-                        <CardHeader className="pb-2">
-                          <div className="flex items-center justify-between">
-                            <div 
-                              className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full
-                                ${problem.difficulty === "easy" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : 
-                                  problem.difficulty === "medium" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300" : 
-                                  "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
-                            >
-                              {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
-                            </div>
-                          </div>
-                          <CardTitle className="text-xl">{problem.title}</CardTitle>
-                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <TagIcon className="mr-1.5 h-3.5 w-3.5" />
-                            {problem.category}
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <CardDescription className="line-clamp-3">
-                            {problem.description.substring(0, 150)}...
-                          </CardDescription>
-                        </CardContent>
-                        <CardFooter>
-                          <Button variant="outline" className="w-full mt-2">
-                            Solve Challenge
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <h3 className="text-xl font-medium">No problems found</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Try adjusting your search or filters
-                  </p>
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
         </div>
       </div>
       
-      {/* Footer - reused from Index.tsx */}
+      <div className="container mx-auto py-8 px-4">
+        {/* Search & Filters */}
+        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:space-y-0 md:space-x-4 mb-8">
+          <div className="relative flex-1">
+            <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+            <Input
+              placeholder="Search problems..."
+              className="pl-9"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <FilterIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <Select value={filterDifficulty} onValueChange={setFilterDifficulty}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Difficulties</SelectItem>
+                <SelectItem value="easy">Easy</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <ArrowUpDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="difficulty">Difficulty</SelectItem>
+                <SelectItem value="points">Points</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
+        {/* Category Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="w-full justify-start overflow-auto">
+            {categories.map((category) => (
+              <TabsTrigger key={category} value={category} className="capitalize">
+                {category === "all" ? "All Categories" : category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        
+        {/* Problems Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProblems.length > 0 ? (
+            filteredProblems.map((problem) => (
+              <Link to={`/problem/${problem.id}`} key={problem.id}>
+                <Card className="h-full transition-all hover:shadow-lg hover:scale-[1.02]">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full
+                            ${problem.difficulty === "easy" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : 
+                              problem.difficulty === "medium" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300" : 
+                              "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
+                        >
+                          {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
+                        </div>
+                        {completedProblemIds?.includes(problem.id) && (
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                            <Check className="h-3.5 w-3.5" />
+                            <span>Solved</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                        <Clock className="h-3.5 w-3.5" />
+                        <span>{problem.difficulty === "easy" ? "10" : problem.difficulty === "medium" ? "20" : "30"} points</span>
+                      </div>
+                    </div>
+                    <CardTitle className="text-xl">{problem.title}</CardTitle>
+                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                      <TagIcon className="mr-1.5 h-3.5 w-3.5" />
+                      {problem.category}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="line-clamp-3">
+                      {problem.description.substring(0, 150)}...
+                    </CardDescription>
+                  </CardContent>
+                  <CardFooter>
+                    <Button variant="outline" className="w-full">
+                      Solve Challenge
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-12">
+              <h3 className="text-xl font-medium mb-2">No problems found</h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Try adjusting your search or filters
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Footer */}
       <footer className="border-t bg-background mt-auto">
         <div className="container flex flex-col gap-2 py-6 md:flex-row md:items-center md:justify-between md:py-8">
           <div className="flex items-center gap-2">

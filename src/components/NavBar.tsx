@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+
 const NavBar = () => {
   const {
     user
@@ -31,12 +32,12 @@ const NavBar = () => {
         <NavigationMenu className="mx-6 hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link to="/problems">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild>
+                <Link to="/problems" className={navigationMenuTriggerStyle()}>
                   <PuzzleIcon className="mr-2 h-4 w-4" />
                   Problems
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             
             <NavigationMenuItem>
@@ -48,7 +49,7 @@ const NavBar = () => {
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <a className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-100 to-blue-50 p-6 no-underline outline-none focus:shadow-md" href="/learn/hdl-basics">
+                      <Link to="/learn/hdl-basics" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-100 to-blue-50 p-6 no-underline outline-none focus:shadow-md">
                         <BookMarked className="h-6 w-6 text-blue-500" />
                         <div className="mb-2 mt-4 text-lg font-medium">
                           HDL Fundamentals
@@ -56,49 +57,55 @@ const NavBar = () => {
                         <p className="text-sm leading-tight text-muted-foreground">
                           Learn the basics of hardware description languages and digital circuit design.
                         </p>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                   <li>
-                    <Link to="/learn/verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                      <div className="text-sm font-medium leading-none">Verilog</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        Master Verilog HDL with tutorials and examples
-                      </p>
-                    </Link>
+                    <NavigationMenuLink asChild>
+                      <Link to="/learn/verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Verilog</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          Master Verilog HDL with tutorials and examples
+                        </p>
+                      </Link>
+                    </NavigationMenuLink>
                   </li>
                   <li>
-                    <Link to="/learn/vhdl" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                      <div className="text-sm font-medium leading-none">VHDL</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        VHDL language reference and practice
-                      </p>
-                    </Link>
+                    <NavigationMenuLink asChild>
+                      <Link to="/learn/vhdl" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">VHDL</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          VHDL language reference and practice
+                        </p>
+                      </Link>
+                    </NavigationMenuLink>
                   </li>
                   <li>
-                    <Link to="/learn/system-verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                      <div className="text-sm font-medium leading-none">SystemVerilog</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        Advanced concepts in SystemVerilog
-                      </p>
-                    </Link>
+                    <NavigationMenuLink asChild>
+                      <Link to="/learn/system-verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">SystemVerilog</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          Advanced concepts in SystemVerilog
+                        </p>
+                      </Link>
+                    </NavigationMenuLink>
                   </li>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
             
             {user && <NavigationMenuItem>
-                <Link to="/dashboard">
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <User className="mr-2 h-4 w-4" />
-                    Dashboard
-                  </NavigationMenuLink>
+              <NavigationMenuLink asChild>
+                <Link to="/dashboard" className={navigationMenuTriggerStyle()}>
+                  <User className="mr-2 h-4 w-4" />
+                  Dashboard
                 </Link>
-              </NavigationMenuItem>}
+              </NavigationMenuLink>
+            </NavigationMenuItem>}
           </NavigationMenuList>
         </NavigationMenu>
         
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="flex items-center space-x-2 ml-auto">
           <Link to="/problems" className="md:hidden">
             <Button variant="ghost" size="icon">
               <PuzzleIcon className="h-5 w-5" />
