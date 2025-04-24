@@ -1,4 +1,3 @@
-
 import { Problem } from '../../types/problem';
 
 export const multiplexerProblems: Problem[] = [
@@ -6,7 +5,8 @@ export const multiplexerProblems: Problem[] = [
     id: "p001",
     title: "2-to-1 Multiplexer",
     difficulty: "easy",
-    category: "Combinational Logic",
+    category: "Combinational Circuits",
+    points: 10,
     description: `
 Design a 2-to-1 multiplexer using Verilog.
 
@@ -71,10 +71,11 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p013",
+    id: "p014",
     title: "4:1 Multiplexer",
     difficulty: "easy",
-    category: "Combinational Logic",
+    category: "Combinational Circuits",
+    points: 10,
     description: `
 Design a 4-to-1 multiplexer using Verilog.
 

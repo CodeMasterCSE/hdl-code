@@ -4,30 +4,41 @@ import { User } from './useAuth';
 import { ProblemCompletion } from '@/types/dashboard';
 
 export interface ProblemStats {
-  beginner: number;
-  intermediate: number;
-  advanced: number;
+  easy: number;
+  medium: number;
+  hard: number;
   total: number;
 }
 
-// Temporary sample difficulties for problems
+// Map of problem IDs to their difficulties
 const SAMPLE_DIFFICULTIES: Record<string, string> = {
-  'lg001': 'beginner',
-  'lg002': 'beginner',
-  'lg003': 'beginner',
-  'p001': 'intermediate',
-  'p004': 'intermediate',
-  'p005': 'intermediate',
-  'p006': 'advanced',
-  'p007': 'advanced',
-  'p009': 'advanced'
+  // Logic Gates
+  'p004': 'easy', // AND Gate
+  'p005': 'easy', // OR Gate
+  'p006': 'easy', // NOT Gate
+  'p007': 'easy', // NAND Gate
+  'p008': 'easy', // NOR Gate
+  
+  // Flip-Flops
+  'ff001': 'medium', // SR Flip-Flop
+  'ff002': 'medium', // D Flip-Flop
+  'ff003': 'medium', // JK Flip-Flop
+  'ff004': 'medium', // T Flip-Flop
+  
+  // Sequential Circuits
+  'seq001': 'hard', // 4-bit Binary Counter
+  'seq002': 'hard', // Modulo-10 Counter
+  'seq003': 'hard', // 4-bit Shift Register
+  'seq004': 'hard', // 4-bit Parallel Load Register
+  'seq005': 'hard', // Sequence Detector
+  'seq006': 'hard'  // Traffic Light Controller
 };
 
 export const useProblemStats = (user: User | null) => {
   const [stats, setStats] = useState<ProblemStats>({
-    beginner: 0,
-    intermediate: 0,
-    advanced: 0,
+    easy: 0,
+    medium: 0,
+    hard: 0,
     total: 0
   });
   const [loading, setLoading] = useState(true);
@@ -35,12 +46,12 @@ export const useProblemStats = (user: User | null) => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      if (!user) {
-        setStats({ beginner: 0, intermediate: 0, advanced: 0, total: 0 });
+    if (!user) {
+        setStats({ easy: 0, medium: 0, hard: 0, total: 0 });
         setCompletedProblemIds([]);
-        setLoading(false);
-        return;
-      }
+      setLoading(false);
+      return;
+    }
 
       try {
         const { data: completions, error } = await supabase
@@ -55,12 +66,12 @@ export const useProblemStats = (user: User | null) => {
 
         const completedIds = completions?.map(c => c.problem_id) || [];
         setCompletedProblemIds(completedIds);
-
+        
         // Count problems by difficulty
         const difficulties = {
-          beginner: 0,
-          intermediate: 0,
-          advanced: 0,
+          easy: 0,
+          medium: 0,
+          hard: 0,
           total: 0
         };
 
@@ -71,7 +82,7 @@ export const useProblemStats = (user: User | null) => {
             difficulties.total++;
           }
         });
-
+        
         setStats(difficulties);
       } catch (error) {
         console.error('Error in useProblemStats:', error);

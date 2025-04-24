@@ -7,10 +7,10 @@ import { Settings, Edit } from "lucide-react";
 interface ProfileCardProps {
   user: User;
   problemStats: {
+    easy: number;
+    medium: number;
+    hard: number;
     total: number;
-    beginner: number;
-    intermediate: number;
-    advanced: number;
   };
 }
 
@@ -65,26 +65,22 @@ export const ProfileCard = ({ user, problemStats }: ProfileCardProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">{problemStats.total}</div>
-            <p className="text-xs text-muted-foreground">Solved</p>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
-              {problemStats.beginner * 10 + 
-               problemStats.intermediate * 20 + 
-               problemStats.advanced * 30}
+        <div className="space-y-4">
+          <div>
+            <div className="text-sm font-medium text-muted-foreground">Total Points</div>
+            <div className="text-2xl font-bold">
+              {problemStats.easy * 10 +
+               problemStats.medium * 20 +
+               problemStats.hard * 30}
             </div>
-            <p className="text-xs text-muted-foreground">Points</p>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
+          <div>
+            <div className="text-sm font-medium text-muted-foreground">Level</div>
+            <div className="text-2xl font-bold">
               {problemStats.total >= 10 ? "Expert" : 
                problemStats.total >= 5 ? "Pro" : 
-               problemStats.total >= 1 ? "Beginner" : "-"}
+               problemStats.total >= 1 ? "Easy" : "-"}
             </div>
-            <p className="text-xs text-muted-foreground">Rank</p>
           </div>
         </div>
       </CardContent>

@@ -1,4 +1,3 @@
-
 import { Problem } from '../../types/problem';
 
 export const adderProblems: Problem[] = [
@@ -6,7 +5,8 @@ export const adderProblems: Problem[] = [
     id: "p002",
     title: "Half Adder",
     difficulty: "easy",
-    category: "Combinational Logic",
+    category: "Combinational Circuits",
+    points: 10,
     description: `
 Design a half adder circuit using Verilog.
 
@@ -71,7 +71,8 @@ endmodule`
     id: "p003",
     title: "Full Adder",
     difficulty: "easy",
-    category: "Combinational Logic",
+    category: "Combinational Circuits",
+    points: 10,
     description: `
 Design a full adder circuit using Verilog.
 

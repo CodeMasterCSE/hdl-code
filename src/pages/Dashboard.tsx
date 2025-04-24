@@ -42,7 +42,7 @@ export default function Dashboard() {
           <div className="lg:col-span-1">
             <ProfileCard user={user} problemStats={problemStats} />
           </div>
-
+          
           {/* Main Content Section */}
           <div className="lg:col-span-3 space-y-6">
             {/* Quick Stats */}
@@ -62,7 +62,7 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {problemStats.beginner * 10 + problemStats.intermediate * 20 + problemStats.advanced * 30}
+                    {problemStats.easy * 10 + problemStats.medium * 20 + problemStats.hard * 30}
                   </div>
                   <div className="text-sm text-muted-foreground mt-1">Keep going!</div>
                 </CardContent>
@@ -75,7 +75,7 @@ export default function Dashboard() {
                   <div className="text-2xl font-bold">
                     {problemStats.total >= 10 ? "Expert" : 
                      problemStats.total >= 5 ? "Pro" : 
-                     problemStats.total >= 1 ? "Beginner" : "-"}
+                     problemStats.total >= 1 ? "Easy" : "-"}
                   </div>
                   <Button variant="ghost" size="sm" className="mt-2">
                     View Leaderboard <ChevronRight className="ml-1 h-4 w-4" />
@@ -104,7 +104,7 @@ export default function Dashboard() {
                   Courses
                 </TabsTrigger>
               </TabsList>
-
+              
               <TabsContent value="progress" className="mt-6">
                 <ProgressTab 
                   statsLoading={statsLoading} 
@@ -112,15 +112,15 @@ export default function Dashboard() {
                   navigate={navigate} 
                 />
               </TabsContent>
-
+              
               <TabsContent value="problems" className="mt-6">
                 <ProblemsTab statsLoading={statsLoading} user={user} />
               </TabsContent>
-
+              
               <TabsContent value="achievements" className="mt-6">
                 <AchievementsTab problemStats={problemStats} />
               </TabsContent>
-
+              
               <TabsContent value="courses" className="mt-6">
                 <CoursesTab />
               </TabsContent>

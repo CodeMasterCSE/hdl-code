@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // Extend the Supabase User type to include our custom fields
 export interface User extends SupabaseUser {
   problems_solved?: number;
+  completedProblems?: string[];
 }
 
 export function useAuth() {

@@ -88,27 +88,47 @@ const ProblemDetail = () => {
         // Insert problem completion record if user is logged in
         if (user) {
           try {
-            // Insert problem completion record
-            const { error } = await supabase
+            // First check if the problem is already completed
+            const { data: existingCompletion, error: checkError } = await supabase
               .from('problem_completions')
-              .insert({
-                user_id: user.id,
-                problem_id: problem.id,
-                solution: code,
-                completed_at: new Date().toISOString()
-              });
+              .select('id')
+              .eq('user_id', user.id)
+              .eq('problem_id', problem.id)
+              .single();
 
-            // Update user's problems solved count
-            const { error: profileError } = await supabase
-              .from('profiles')
-              .update({ problems_solved: (user.problems_solved || 0) + 1 })
-              .eq('id', user.id);
+            if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+              console.error("Error checking existing completion:", checkError);
+              return;
+            }
 
-            if (error || profileError) {
-              console.error("Error tracking problem completion", error, profileError);
+            // Only insert if not already completed
+            if (!existingCompletion) {
+              const { error: insertError } = await supabase
+                .from('problem_completions')
+                .insert({
+                  user_id: user.id,
+                  problem_id: problem.id,
+                  solution: code,
+                  completed_at: new Date().toISOString()
+                });
+
+              if (insertError) {
+                console.error("Error inserting problem completion:", insertError);
+                return;
+              }
+
+              // Update user's problems solved count
+              const { error: profileError } = await supabase
+                .from('profiles')
+                .update({ problems_solved: (user.problems_solved || 0) + 1 })
+                .eq('id', user.id);
+
+              if (profileError) {
+                console.error("Error updating profile:", profileError);
+              }
             }
           } catch (err) {
-            console.error("Error submitting problem completion", err);
+            console.error("Error in problem completion process:", err);
           }
         }
       } else {

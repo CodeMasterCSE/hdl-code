@@ -7,10 +7,10 @@ import { BarChart, TrendingUp, Target, Award } from "lucide-react";
 interface ProgressTabProps {
   statsLoading: boolean;
   problemStats: {
+    easy: number;
+    medium: number;
+    hard: number;
     total: number;
-    beginner: number;
-    intermediate: number;
-    advanced: number;
   };
   navigate: NavigateFunction;
 }
@@ -21,22 +21,22 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
 
   const difficultyStats = [
     {
-      title: "Beginner",
-      value: problemStats.beginner,
+      title: "Easy",
+      value: problemStats.easy,
       total: 20,
       icon: <BarChart className="h-4 w-4" />,
       color: "text-green-500"
     },
     {
-      title: "Intermediate",
-      value: problemStats.intermediate,
+      title: "Medium",
+      value: problemStats.medium,
       total: 20,
       icon: <TrendingUp className="h-4 w-4" />,
       color: "text-yellow-500"
     },
     {
-      title: "Advanced",
-      value: problemStats.advanced,
+      title: "Hard",
+      value: problemStats.hard,
       total: 10,
       icon: <Target className="h-4 w-4" />,
       color: "text-red-500"
@@ -53,20 +53,20 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {statsLoading ? (
+        {statsLoading ? (
             <div className="animate-pulse space-y-4">
               <div className="h-4 bg-muted rounded w-3/4" />
               <div className="h-2 bg-muted rounded" />
             </div>
-          ) : (
-            <>
+        ) : (
+          <>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Progress</span>
                   <span className="font-medium">{Math.round(completionPercentage)}%</span>
                 </div>
                 <Progress value={completionPercentage} className="h-2" />
-                <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
                   {problemStats.total} of {totalProblems} problems completed
                 </p>
               </div>
@@ -92,8 +92,8 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
                   </Card>
                 ))}
               </div>
-            </>
-          )}
+          </>
+        )}
         </CardContent>
       </Card>
     </div>

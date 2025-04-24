@@ -1,4 +1,3 @@
-
 import { Problem } from '../types/problem';
 
 export const logicGateProblems: Problem[] = [
@@ -7,6 +6,7 @@ export const logicGateProblems: Problem[] = [
     title: "AND Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input AND gate using Verilog.
 
@@ -65,6 +65,7 @@ endmodule`
     title: "OR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input OR gate using Verilog.
 
@@ -123,6 +124,7 @@ endmodule`
     title: "NOT Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a NOT gate (inverter) using Verilog.
 
@@ -172,6 +174,7 @@ endmodule`
     title: "NAND Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input NAND gate using Verilog.
 
@@ -235,6 +238,7 @@ endmodule`
     title: "NOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input NOR gate using Verilog.
 
@@ -298,6 +302,7 @@ endmodule`
     title: "XOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input XOR (Exclusive OR) gate using Verilog.
 
@@ -363,6 +368,7 @@ endmodule`
     title: "XNOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
+    points: 10,
     description: `
 Design a 2-input XNOR (Exclusive NOR) gate using Verilog.
 
@@ -428,6 +434,7 @@ endmodule`
     title: "Universal Gate Implementation",
     difficulty: "medium",
     category: "Logic Gates",
+    points: 20,
     description: `
 Design a module that demonstrates how NAND gates can be used to implement any basic logic gate.
 

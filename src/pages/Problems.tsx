@@ -24,29 +24,54 @@ import { sampleProblems } from "@/lib/problems";
 import { SearchIcon, FilterIcon, TagIcon, ArrowUpDown, Trophy, Star, Clock, Check } from "lucide-react";
 import { useProblemStats } from "@/hooks/useProblemStats";
 import { useAuth } from "@/hooks/useAuth";
+import { flipFlopProblems } from "@/lib/problems/flipflops";
+import { counterProblems } from "@/lib/problems/counters";
+import { registerProblems } from "@/lib/problems/registers";
+import { stateMachineProblems } from "@/lib/problems/state-machines";
+import { subtractorProblems } from "@/lib/problems/combinational/subtractors";
+import { Problem } from "@/lib/types/problem";
+
+type SortOption = "difficulty" | "points";
 
 const Problems = () => {
-  const [filterDifficulty, setFilterDifficulty] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
-  const [sortBy, setSortBy] = useState("difficulty");
   const { user } = useAuth();
   const { stats: problemStats, completedProblemIds } = useProblemStats(user);
 
-  const filteredProblems = sampleProblems
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<SortOption>("difficulty");
+  const [activeTab, setActiveTab] = useState("all");
+
+  const allProblems = [
+    ...sampleProblems,
+    ...flipFlopProblems,
+    ...counterProblems,
+    ...registerProblems,
+    ...stateMachineProblems,
+    ...subtractorProblems,
+  ];
+
+  const filteredProblems = allProblems
     .filter((problem) => {
       // Filter by search term
       const matchesSearch = 
-        problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        problem.description.toLowerCase().includes(searchTerm.toLowerCase());
+        problem.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        problem.description.toLowerCase().includes(searchQuery.toLowerCase());
       
       // Filter by difficulty
       const matchesDifficulty = 
-        filterDifficulty === "all" || problem.difficulty === filterDifficulty;
+        difficultyFilter === "all" || problem.difficulty === difficultyFilter;
       
       // Filter by category (tab)
       const matchesCategory = 
-        activeTab === "all" || problem.category.toLowerCase().includes(activeTab.toLowerCase());
+        activeTab === "all" || 
+        (activeTab === "Logic Gates" && problem.category === "Logic Gates") ||
+        (activeTab === "Combinational Circuits" && problem.category === "Combinational Circuits") ||
+        (activeTab === "Flip Flops" && problem.category === "Flip Flops") ||
+        (activeTab === "Counters" && problem.category === "Counters") ||
+        (activeTab === "Registers" && problem.category === "Registers") ||
+        (activeTab === "State Machines" && problem.category === "State Machines");
       
       return matchesSearch && matchesDifficulty && matchesCategory;
     })
@@ -63,8 +88,16 @@ const Problems = () => {
       }
     });
 
-  const categories = ["all", ...Array.from(new Set(sampleProblems.map(p => p.category)))];
-  const totalProblems = sampleProblems.length;
+  const categories = [
+    "all",
+    "Logic Gates",
+    "Combinational Circuits",
+    "Flip Flops",
+    "Counters",
+    "Registers",
+    "State Machines"
+  ];
+  const totalProblems = allProblems.length;
   const solvedProblems = problemStats?.total || 0;
   const completionPercentage = (solvedProblems / totalProblems) * 100;
 
@@ -146,38 +179,40 @@ const Problems = () => {
             <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
             <Input
               placeholder="Search problems..."
-              className="pl-9"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           
-          <div className="flex items-center space-x-2">
-            <FilterIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <Select value={filterDifficulty} onValueChange={setFilterDifficulty}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Difficulties</SelectItem>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="hard">Hard</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+            <div className="flex items-center space-x-2">
+              <FilterIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+                <SelectTrigger className="w-[140px] sm:w-[180px]">
+                  <SelectValue placeholder="Difficulty" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Difficulties</SelectItem>
+                  <SelectItem value="easy">Easy</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="hard">Hard</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="flex items-center space-x-2">
-            <ArrowUpDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="difficulty">Difficulty</SelectItem>
-                <SelectItem value="points">Points</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex items-center space-x-2">
+              <ArrowUpDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as SortOption)}>
+                <SelectTrigger className="w-[140px] sm:w-[180px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="difficulty">Difficulty</SelectItem>
+                  <SelectItem value="points">Points</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
         
@@ -185,7 +220,7 @@ const Problems = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
           <TabsList className="w-full justify-start overflow-auto">
             {categories.map((category) => (
-              <TabsTrigger key={category} value={category} className="capitalize">
+              <TabsTrigger key={category} value={category} className="capitalize whitespace-nowrap">
                 {category === "all" ? "All Categories" : category}
               </TabsTrigger>
             ))}
@@ -193,14 +228,14 @@ const Problems = () => {
         </Tabs>
         
         {/* Problems Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProblems.length > 0 ? (
             filteredProblems.map((problem) => (
               <Link to={`/problem/${problem.id}`} key={problem.id}>
                 <Card className="h-full transition-all hover:shadow-lg hover:scale-[1.02]">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                  <CardHeader className="space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex flex-wrap items-center gap-2">
                         <div 
                           className={`inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full
                             ${problem.difficulty === "easy" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : 
@@ -209,26 +244,26 @@ const Problems = () => {
                         >
                           {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
                         </div>
-                        {completedProblemIds?.includes(problem.id) && (
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                            <Check className="h-3.5 w-3.5" />
-                            <span>Solved</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1 text-sm text-yellow-600 dark:text-yellow-400">
+                          <Trophy className="h-3.5 w-3.5" />
+                          {problem.points} points
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                        <Clock className="h-3.5 w-3.5" />
-                        <span>{problem.difficulty === "easy" ? "10" : problem.difficulty === "medium" ? "20" : "30"} points</span>
-                      </div>
+                      {completedProblemIds?.includes(problem.id) && (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                          <Check className="h-3.5 w-3.5" />
+                          <span>Solved</span>
+                        </div>
+                      )}
                     </div>
-                    <CardTitle className="text-xl">{problem.title}</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl line-clamp-2">{problem.title}</CardTitle>
                     <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                       <TagIcon className="mr-1.5 h-3.5 w-3.5" />
                       {problem.category}
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="line-clamp-3">
+                    <CardDescription className="line-clamp-3 text-sm sm:text-base">
                       {problem.description.substring(0, 150)}...
                     </CardDescription>
                   </CardContent>
