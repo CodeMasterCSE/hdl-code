@@ -111,7 +111,7 @@ endmodule`}
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Link to="/register">
-                <Button size="lg" className="gap-1.5 text-white text-center rounded-sm">
+                <Button size="lg" className="gap-1.5 bg-blue-500 hover:bg-blue-600 text-white text-center rounded-sm">
                   Get Started
                   <Zap className="h-4 w-4" />
                 </Button>

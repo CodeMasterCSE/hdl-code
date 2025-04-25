@@ -191,7 +191,7 @@ const ProblemDetail = () => {
                 <Button 
                   onClick={runTests} 
                   disabled={isRunning}
-                  className="gap-2"
+                  className="gap-2 bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   {isRunning ? (
                     <>

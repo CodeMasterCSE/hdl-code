@@ -65,7 +65,7 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
                   <span className="text-muted-foreground">Progress</span>
                   <span className="font-medium">{Math.round(completionPercentage)}%</span>
                 </div>
-                <Progress value={completionPercentage} className="h-2" />
+                <Progress value={completionPercentage} className="h-2 bg-blue-500/20 dark:bg-blue-500/40" />
             <p className="text-sm text-muted-foreground">
                   {problemStats.total} of {totalProblems} problems completed
                 </p>

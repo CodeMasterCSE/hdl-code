@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useMode } from '@/contexts/ModeContext'
 import NavBar from "@/components/NavBar";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { useProblemStats } from "@/hooks/useProblemStats";
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { stats: problemStats, loading: statsLoading } = useProblemStats(user);
+  const { mode, setMode, resolvedMode } = useMode();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -39,8 +41,52 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Profile Section */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <ProfileCard user={user} problemStats={problemStats} />
+            
+            {/* Mode Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Appearance</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setMode('light')}
+                    className={`flex-1 px-3 py-2 rounded-md ${
+                      mode === 'light'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted hover:bg-muted/80'
+                    }`}
+                  >
+                    Light
+                  </button>
+                  <button
+                    onClick={() => setMode('dark')}
+                    className={`flex-1 px-3 py-2 rounded-md ${
+                      mode === 'dark'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted hover:bg-muted/80'
+                    }`}
+                  >
+                    Dark
+                  </button>
+                  <button
+                    onClick={() => setMode('system')}
+                    className={`flex-1 px-3 py-2 rounded-md ${
+                      mode === 'system'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted hover:bg-muted/80'
+                    }`}
+                  >
+                    System
+                  </button>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Current mode: {resolvedMode} {mode === 'system' && '(System)'}
+                </p>
+              </CardContent>
+            </Card>
           </div>
           
           {/* Main Content Section */}
@@ -53,7 +99,7 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{problemStats.total}</div>
-                  <Progress value={(problemStats.total / 50) * 100} className="mt-2" />
+                  <Progress value={(problemStats.total / 50) * 100} className="mt-2 bg-blue-500/20 dark:bg-blue-500/40" />
                 </CardContent>
               </Card>
               <Card className="hover:shadow-lg transition-shadow">

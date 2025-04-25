@@ -93,15 +93,6 @@ const NavBar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            
-            {user && <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link to="/dashboard" className={navigationMenuTriggerStyle()}>
-                  <User className="mr-2 h-4 w-4" />
-                  Dashboard
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>}
           </NavigationMenuList>
         </NavigationMenu>
         
@@ -112,7 +103,7 @@ const NavBar = () => {
             </Button>
           </Link>
           
-          <a href="https://github.com/hdlcode/hdlcode" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/CodeMasterCSE/hdl-code" target="_blank" rel="noopener noreferrer">
             <Button variant="ghost" size="icon">
               <Github className="h-5 w-5" />
             </Button>

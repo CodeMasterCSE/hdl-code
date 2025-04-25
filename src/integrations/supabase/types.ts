@@ -42,6 +42,7 @@ export type Database = {
           points: number | null
           problems_solved: number | null
           username: string | null
+          mode_preference: 'light' | 'dark' | 'system' | null
         }
         Insert: {
           bio?: string | null
@@ -51,6 +52,7 @@ export type Database = {
           points?: number | null
           problems_solved?: number | null
           username?: string | null
+          mode_preference?: 'light' | 'dark' | 'system' | null
         }
         Update: {
           bio?: string | null
@@ -60,6 +62,7 @@ export type Database = {
           points?: number | null
           problems_solved?: number | null
           username?: string | null
+          mode_preference?: 'light' | 'dark' | 'system' | null
         }
         Relationships: []
       }

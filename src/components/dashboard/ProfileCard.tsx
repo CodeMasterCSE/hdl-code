@@ -2,7 +2,10 @@ import { User } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Settings, Edit } from "lucide-react";
+import { Settings, Edit, Check, X } from "lucide-react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProfileCardProps {
   user: User;
@@ -14,7 +17,11 @@ interface ProfileCardProps {
   };
 }
 
-export const ProfileCard = ({ user, problemStats }: ProfileCardProps) => {
+export const ProfileCard = ({ user }: ProfileCardProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [username, setUsername] = useState(user.user_metadata?.username || '');
+  const email = user.email || '';
+
   const getInitials = (name: string) => {
     return name
       ? name
@@ -26,7 +33,26 @@ export const ProfileCard = ({ user, problemStats }: ProfileCardProps) => {
   };
 
   const fullName = user.user_metadata?.full_name || '';
-  const email = user.email || '';
+
+  const handleSave = async () => {
+    try {
+      // Update username in user metadata
+      const { error } = await supabase.auth.updateUser({
+        data: { username }
+      });
+
+      if (error) throw error;
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    setUsername(user.user_metadata?.username || '');
+    setIsEditing(false);
+  };
 
   return (
     <Card className="hover:shadow-lg transition-shadow">
@@ -44,9 +70,9 @@ export const ProfileCard = ({ user, problemStats }: ProfileCardProps) => {
       <CardContent className="space-y-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">
-            <Avatar className="h-24 w-24 ring-4 ring-primary/10">
+            <Avatar className="h-24 w-24 ring-4 ring-blue-500/20">
               <AvatarImage src="" alt={fullName} />
-              <AvatarFallback className="text-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+              <AvatarFallback className="text-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white dark:from-blue-400 dark:to-blue-500">
                 {getInitials(fullName)}
               </AvatarFallback>
             </Avatar>
@@ -59,28 +85,52 @@ export const ProfileCard = ({ user, problemStats }: ProfileCardProps) => {
             </Button>
           </div>
           
-          <div className="text-center space-y-1">
-            <h3 className="text-xl font-semibold">{fullName || 'HDL User'}</h3>
-            <p className="text-sm text-muted-foreground">{email}</p>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Total Points</div>
-            <div className="text-2xl font-bold">
-              {problemStats.easy * 10 +
-               problemStats.medium * 20 +
-               problemStats.hard * 30}
-            </div>
-          </div>
-          <div>
-            <div className="text-sm font-medium text-muted-foreground">Level</div>
-            <div className="text-2xl font-bold">
-              {problemStats.total >= 10 ? "Expert" : 
-               problemStats.total >= 5 ? "Pro" : 
-               problemStats.total >= 1 ? "Easy" : "-"}
-            </div>
+          <div className="text-center space-y-4 w-full">
+            {isEditing ? (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email</label>
+                  <Input
+                    value={email}
+                    disabled
+                    className="bg-muted"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Username</label>
+                  <Input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter username"
+                  />
+                </div>
+                <div className="flex justify-center space-x-2">
+                  <Button variant="outline" size="sm" onClick={handleCancel}>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancel
+                  </Button>
+                  <Button size="sm" onClick={handleSave}>
+                    <Check className="h-4 w-4 mr-2" />
+                    Save
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">{fullName || 'HDL User'}</h3>
+                <p className="text-sm text-muted-foreground">@{username}</p>
+                <p className="text-sm text-muted-foreground">{email}</p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Username
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
