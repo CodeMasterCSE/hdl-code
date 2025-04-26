@@ -2,10 +2,11 @@ import { Problem } from '../../types/problem';
 
 export const jkFlipFlopProblems: Problem[] = [
   {
-    id: "ff003",
+    id: "p018",
     title: "JK Flip-Flop Implementation",
     difficulty: "medium",
     category: "Flip Flops",
+    points: 20,
     description: `
 Design a JK flip-flop using Verilog.
 

@@ -47,8 +47,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ onClose, problem }) => {
           <div className="flex items-center justify-center space-x-2 mb-6">
             <Trophy className="h-5 w-5 text-yellow-500" />
             <span className="font-medium">
-              {problem.difficulty === 'Easy' ? '10' :
-               problem.difficulty === 'Medium' ? '20' : '30'} points earned
+              {problem.points} points earned
             </span>
             <Award className="h-5 w-5 text-blue-500 ml-2" />
           </div>

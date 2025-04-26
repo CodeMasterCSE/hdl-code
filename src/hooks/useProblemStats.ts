@@ -13,25 +13,53 @@ export interface ProblemStats {
 // Map of problem IDs to their difficulties
 const SAMPLE_DIFFICULTIES: Record<string, string> = {
   // Logic Gates
-  'p004': 'easy', // AND Gate
-  'p005': 'easy', // OR Gate
-  'p006': 'easy', // NOT Gate
-  'p007': 'easy', // NAND Gate
-  'p008': 'easy', // NOR Gate
+  'p001': 'easy', // AND Gate
+  'p002': 'easy', // OR Gate
+  'p003': 'easy', // NOT Gate
+  'p004': 'easy', // NAND Gate
+  'p005': 'easy', // NOR Gate
+  'p006': 'easy', // XOR Gate
+  'p007': 'easy', // XNOR Gate
+  'p008': 'medium', // Universal Gate
+  
+  // Combinational Circuits
+  'p013': 'easy', // 2:1 Multiplexer
+  'p014': 'easy', // 4:1 Multiplexer
+  'p011': 'easy', // Half Subtractor
+  'p012': 'easy', // Full Subtractor
+  'p009': 'easy', // Half Adder
+  'p010': 'easy', // Full Adder
   
   // Flip-Flops
-  'ff001': 'medium', // SR Flip-Flop
-  'ff002': 'medium', // D Flip-Flop
-  'ff003': 'medium', // JK Flip-Flop
-  'ff004': 'medium', // T Flip-Flop
+  'p015': 'medium', // SR Flip-Flop
+  'p016': 'medium', // D Flip-Flop
+  'p017': 'medium', // T Flip-Flop
+  'p018': 'medium', // JK Flip-Flop
   
-  // Sequential Circuits
-  'seq001': 'hard', // 4-bit Binary Counter
-  'seq002': 'hard', // Modulo-10 Counter
-  'seq003': 'hard', // 4-bit Shift Register
-  'seq004': 'hard', // 4-bit Parallel Load Register
-  'seq005': 'hard', // Sequence Detector
-  'seq006': 'hard'  // Traffic Light Controller
+  // Counters
+  'p019': 'medium', // 1-bit Binary Up Counter
+  'p020': 'medium', // 1-bit Binary Down Counter
+  'p021': 'medium', // 2-bit Binary Up Counter
+  'p022': 'medium', // 2-bit Binary Down Counter
+  'p023': 'medium', // 4-bit Binary Up Counter
+  'p024': 'medium', // 4-bit Binary Down Counter
+  'p025': 'hard', // 4-bit Up-Down Counter
+  'p026': 'hard', // BCD Counter
+  'p027': 'hard', // 4-bit Ring Counter
+  'p028': 'hard', // 4-bit Johnson Counter
+
+  // Registers
+  'p029': 'medium', // 4-bit Shift Left Register
+  'p030': 'medium', // 4-bit Shift Right Register
+  'p031': 'hard', // 4-bit Bidirectional Shift Register
+  'p032': 'hard', // PIPO Register
+  'p033': 'hard', // PISO Register
+  'p034': 'hard', // SIPO Register
+  'p035': 'hard', // SISO Register
+
+  // State Machines
+  'p036': 'hard', // Sequence Detector (101)
+  'p037': 'hard', // Traffic Light Controller
 };
 
 export const useProblemStats = (user: User | null) => {

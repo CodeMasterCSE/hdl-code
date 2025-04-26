@@ -1,9 +1,10 @@
 export const dFlipFlopProblems = [
   {
-    id: "ff002",
+    id: "p016",
     title: "D Flip-Flop Implementation",
     difficulty: "medium",
     category: "Flip Flops",
+    points: 20,
     description: `
 Design a D (Data) flip-flop using Verilog.
 

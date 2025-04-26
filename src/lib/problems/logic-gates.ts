@@ -2,7 +2,7 @@ import { Problem } from '../types/problem';
 
 export const logicGateProblems: Problem[] = [
   {
-    id: "p004",
+    id: "p001",
     title: "AND Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -61,7 +61,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p005",
+    id: "p002",
     title: "OR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -120,7 +120,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p006",
+    id: "p003",
     title: "NOT Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -170,7 +170,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p007",
+    id: "p004",
     title: "NAND Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -234,7 +234,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p008",
+    id: "p005",
     title: "NOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -298,7 +298,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p009",
+    id: "p006",
     title: "XOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -364,7 +364,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p010",
+    id: "p007",
     title: "XNOR Gate Implementation",
     difficulty: "easy",
     category: "Logic Gates",
@@ -430,7 +430,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p011",
+    id: "p008",
     title: "Universal Gate Implementation",
     difficulty: "medium",
     category: "Logic Gates",

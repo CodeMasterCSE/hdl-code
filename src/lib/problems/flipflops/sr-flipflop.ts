@@ -2,10 +2,11 @@ import { Problem } from '../../types/problem';
 
 export const srFlipFlopProblems: Problem[] = [
   {
-    id: "ff001",
+    id: "p015",
     title: "SR Flip-Flop Implementation",
     difficulty: "medium",
     category: "Flip Flops",
+    points: 20,
     description: `
 Design an SR (Set-Reset) flip-flop using Verilog.
 

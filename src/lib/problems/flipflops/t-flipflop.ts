@@ -2,10 +2,11 @@ import { Problem } from '../../types/problem';
 
 export const tFlipFlopProblems: Problem[] = [
   {
-    id: "ff004",
+    id: "p017",
     title: "T Flip-Flop Implementation",
     difficulty: "medium",
     category: "Flip Flops",
+    points: 20,
     description: `
 Design a T (Toggle) flip-flop using Verilog.
 

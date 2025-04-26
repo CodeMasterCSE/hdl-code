@@ -2,11 +2,11 @@ import { Problem } from '../types/problem';
 
 export const stateMachineProblems: Problem[] = [
   {
-    id: "seq005",
+    id: "p034",
     title: "Sequence Detector (101)",
-    difficulty: "medium",
+    difficulty: "hard",
     category: "State Machines",
-    points: 20,
+    points: 30,
     description: `
 Design a sequence detector that detects the sequence "101" using Verilog.
 
@@ -94,11 +94,11 @@ endmodule`,
 endmodule`
   },
   {
-    id: "seq006",
+    id: "p035",
     title: "Traffic Light Controller",
-    difficulty: "medium",
+    difficulty: "hard",
     category: "State Machines",
-    points: 20,
+    points: 30,
     description: `
 Design a simple traffic light controller using Verilog.
 
@@ -181,5 +181,60 @@ endmodule`,
     green = (state == GREEN);
   end
 endmodule`
+  },
+  {
+    id: "p036",
+    title: "Moore FSM – Even Parity Detector",
+    difficulty: "hard",
+    category: "State Machines",
+    points: 30,
+    description: `
+Design a Moore Finite State Machine (FSM) to detect even parity in a stream of bits.
+
+The detector should:
+- Detect even parity in a stream of bits
+- Output 1 when even parity is detected
+- Output 0 otherwise
+- Reset to initial state when reset signal is high
+- Have a synchronous reset
+
+Implement the even parity detector with the following specifications:
+- One clock input (clk)
+- One reset input (reset)
+- One data input (data_in)
+- One output (parity_detected)
+    `,
+    constraints: [
+      "Use behavioral modeling",
+      "Your module must be named 'even_parity_detector'",
+      "Inputs and outputs must be as specified in the description",
+      "The detector should be synchronous"
+    ],
+    starterCode: `module even_parity_detector(
+  input clk,
+  input reset,
+  input data_in,
+  output reg parity_detected
+);
+  // Your code here
+
+endmodule`,
+    testCases: [
+      {
+        inputs: { clk: "1", reset: "1", data_in: "0" },
+        outputs: { parity_detected: "1" },
+        description: "Reset detector to even parity"
+      },
+      {
+        inputs: { clk: "1", reset: "0", data_in: "1" },
+        outputs: { parity_detected: "0" },
+        description: "First bit of sequence, odd parity"
+      },
+      {
+        inputs: { clk: "1", reset: "0", data_in: "1" },
+        outputs: { parity_detected: "1" },
+        description: "Second bit of sequence, even parity"
+      },
+    ]
   }
 ]; 

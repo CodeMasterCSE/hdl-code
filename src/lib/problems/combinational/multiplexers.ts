@@ -2,8 +2,8 @@ import { Problem } from '../../types/problem';
 
 export const multiplexerProblems: Problem[] = [
   {
-    id: "p001",
-    title: "2-to-1 Multiplexer",
+    id: "p013",
+    title: "2:1 Multiplexer",
     difficulty: "easy",
     category: "Combinational Circuits",
     points: 10,

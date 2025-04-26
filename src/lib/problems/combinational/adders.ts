@@ -2,7 +2,7 @@ import { Problem } from '../../types/problem';
 
 export const adderProblems: Problem[] = [
   {
-    id: "p002",
+    id: "p009",
     title: "Half Adder",
     difficulty: "easy",
     category: "Combinational Circuits",
@@ -68,7 +68,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p003",
+    id: "p010",
     title: "Full Adder",
     difficulty: "easy",
     category: "Combinational Circuits",
