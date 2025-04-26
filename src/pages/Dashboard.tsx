@@ -93,37 +93,116 @@ export default function Dashboard() {
           <div className="lg:col-span-3 space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Problems</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{problemStats.total}</div>
-                  <Progress value={(problemStats.total / 50) * 100} className="mt-2 bg-blue-500/20 dark:bg-blue-500/40" />
+              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+                <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Total Problems</h3>
+                      <div className="text-4xl font-bold mt-1">{problemStats.total}</div>
+                    </div>
+                    <div className="h-12 w-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <PuzzleIcon className="h-6 w-6 text-blue-500" />
+                    </div>
+                  </div>
+                </div>
+                <CardContent className="pt-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span className="text-sm text-muted-foreground">Easy</span>
+                      </div>
+                      <span className="text-base font-medium">{problemStats.easy}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                        <span className="text-sm text-muted-foreground">Medium</span>
+                      </div>
+                      <span className="text-base font-medium">{problemStats.medium}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                        <span className="text-sm text-muted-foreground">Hard</span>
+                      </div>
+                      <span className="text-base font-medium">{problemStats.hard}</span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Points Earned</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {problemStats.easy * 10 + problemStats.medium * 20 + problemStats.hard * 30}
+              
+              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+                <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Points Earned</h3>
+                      <div className="text-3xl font-bold mt-1">
+                        {problemStats.easy * 10 + problemStats.medium * 20 + problemStats.hard * 30}
+                      </div>
+                    </div>
+                    <div className="h-12 w-12 rounded-full bg-amber-500/20 flex items-center justify-center">
+                      <TrophyIcon className="h-6 w-6 text-amber-500" />
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground mt-1">Keep going!</div>
+                </div>
+                <CardContent className="pt-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Easy Problems</span>
+                      <span className="text-sm font-medium">{problemStats.easy * 10} pts</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Medium Problems</span>
+                      <span className="text-sm font-medium">{problemStats.medium * 20} pts</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Hard Problems</span>
+                      <span className="text-sm font-medium">{problemStats.hard * 30} pts</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-xs text-muted-foreground">
+                    Keep solving to earn more points!
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Current Rank</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {problemStats.total >= 10 ? "Expert" : 
-                     problemStats.total >= 5 ? "Pro" : 
-                     problemStats.total >= 1 ? "Easy" : "-"}
+              
+              <Card className="hover:shadow-lg transition-shadow overflow-hidden">
+                <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Current Rank</h3>
+                      <div className="text-3xl font-bold mt-1">
+                        {problemStats.total >= 10 ? "Expert" : 
+                         problemStats.total >= 5 ? "Pro" : 
+                         problemStats.total >= 1 ? "Beginner" : "-"}
+                      </div>
+                    </div>
+                    <div className="h-12 w-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                      <BarChart className="h-6 w-6 text-purple-500" />
+                    </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="mt-2">
+                </div>
+                <CardContent className="pt-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Next Rank</span>
+                      <span className="text-sm font-medium">
+                        {problemStats.total < 1 ? "Beginner" : 
+                         problemStats.total < 5 ? "Pro" : 
+                         problemStats.total < 10 ? "Expert" : "Master"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Problems Needed</span>
+                      <span className="text-sm font-medium">
+                        {problemStats.total < 1 ? 1 : 
+                         problemStats.total < 5 ? 5 - problemStats.total : 
+                         problemStats.total < 10 ? 10 - problemStats.total : 0}
+                      </span>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" className="mt-3 w-full">
                     View Leaderboard <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 </CardContent>
