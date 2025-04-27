@@ -8,7 +8,6 @@ import { flipFlopProblems } from "@/lib/problems/flipflops";
 import { counterProblems } from "@/lib/problems/counters";
 import { registerProblems } from "@/lib/problems/registers";
 import { stateMachineProblems } from "@/lib/problems/state-machines";
-import { subtractorProblems } from "@/lib/problems/combinational/subtractors";
 
 interface ProblemsTabProps {
   statsLoading: boolean;
@@ -24,7 +23,6 @@ export const ProblemsTab = ({ statsLoading, user }: ProblemsTabProps) => {
     ...counterProblems,
     ...registerProblems,
     ...stateMachineProblems,
-    ...subtractorProblems,
   ];
 
   const solvedProblems = allProblems.filter(problem => 

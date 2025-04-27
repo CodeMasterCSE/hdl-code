@@ -161,9 +161,6 @@ export default function Dashboard() {
                       <span className="text-sm font-medium">{problemStats.hard * 30} pts</span>
                     </div>
                   </div>
-                  <div className="mt-3 text-xs text-muted-foreground">
-                    Keep solving to earn more points!
-                  </div>
                 </CardContent>
               </Card>
               
@@ -243,7 +240,7 @@ export default function Dashboard() {
               </TabsContent>
               
               <TabsContent value="achievements" className="mt-6">
-                <AchievementsTab problemStats={problemStats} />
+                <AchievementsTab problemStats={{...problemStats, beginner: 0, intermediate: 0, advanced: 0}} />
               </TabsContent>
               
               <TabsContent value="courses" className="mt-6">

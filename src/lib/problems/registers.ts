@@ -2,7 +2,7 @@ import { Problem } from '../types/problem';
 
 export const registerProblems: Problem[] = [
   {
-    id: "p029",
+    id: "p031",
     title: "4-bit Shift Left Register",
     difficulty: "medium",
     category: "Registers",
@@ -64,7 +64,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p030",
+    id: "p032",
     title: "4-bit Shift Right Register",
     difficulty: "medium",
     category: "Registers",
@@ -126,7 +126,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p031",
+    id: "p033",
     title: "4-bit Bidirectional Shift Register",
     difficulty: "hard",
     category: "Registers",
@@ -199,7 +199,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p032",
+    id: "p034",
     title: "PISO Register",
     difficulty: "hard",
     category: "Registers",
@@ -264,7 +264,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p033",
+    id: "p035",
     title: "SIPO Register",
     difficulty: "hard",
     category: "Registers",

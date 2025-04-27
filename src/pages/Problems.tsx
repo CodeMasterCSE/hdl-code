@@ -28,7 +28,6 @@ import { flipFlopProblems } from "@/lib/problems/flipflops";
 import { counterProblems } from "@/lib/problems/counters";
 import { registerProblems } from "@/lib/problems/registers";
 import { stateMachineProblems } from "@/lib/problems/state-machines";
-import { subtractorProblems } from "@/lib/problems/combinational/subtractors";
 import { Problem } from "@/lib/types/problem";
 
 type SortOption = "difficulty" | "points";
@@ -44,13 +43,15 @@ const Problems = () => {
   const [activeTab, setActiveTab] = useState("all");
 
   const allProblems = [
-    ...sampleProblems,
     ...flipFlopProblems,
     ...counterProblems,
     ...registerProblems,
     ...stateMachineProblems,
-    ...subtractorProblems,
+    ...sampleProblems,
   ];
+
+  // Debug: Log all problems and their categories
+  console.log('All problems:', allProblems.map(p => `${p.id}: ${p.title} (${p.category})`));
 
   const filteredProblems = allProblems
     .filter((problem) => {
@@ -67,11 +68,17 @@ const Problems = () => {
       const matchesCategory = 
         activeTab === "all" || 
         (activeTab === "Logic Gates" && problem.category === "Logic Gates") ||
-        (activeTab === "Combinational Circuits" && problem.category === "Combinational Circuits") ||
+        (activeTab === "Arithmetic Circuits" && problem.category === "Arithmetic Circuits") ||
+        (activeTab === "Data Selectors" && problem.category === "Data Selectors") ||
         (activeTab === "Flip Flops" && problem.category === "Flip Flops") ||
         (activeTab === "Counters" && problem.category === "Counters") ||
         (activeTab === "Registers" && problem.category === "Registers") ||
         (activeTab === "State Machines" && problem.category === "State Machines");
+      
+      // Debug: Log problem category and whether it matches
+      if (activeTab !== "all") {
+        console.log(`Problem: ${problem.title}, Category: ${problem.category}, Active Tab: ${activeTab}, Matches: ${matchesCategory}`);
+      }
       
       return matchesSearch && matchesDifficulty && matchesCategory;
     })
@@ -91,7 +98,8 @@ const Problems = () => {
   const categories = [
     "all",
     "Logic Gates",
-    "Combinational Circuits",
+    "Arithmetic Circuits",
+    "Data Selectors",
     "Flip Flops",
     "Counters",
     "Registers",

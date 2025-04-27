@@ -2,7 +2,7 @@ import { Problem } from '../types/problem';
 
 export const counterProblems: Problem[] = [
   {
-    id: "p019",
+    id: "p021",
     title: "1-bit Binary Up Counter",
     difficulty: "medium",
     category: "Counters",
@@ -67,7 +67,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p020",
+    id: "p022",
     title: "1-bit Binary Down Counter",
     difficulty: "medium",
     category: "Counters",
@@ -132,7 +132,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p021",
+    id: "p023",
     title: "2-bit Binary Up Counter",
     difficulty: "medium",
     category: "Counters",
@@ -207,7 +207,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p022",
+    id: "p024",
     title: "2-bit Binary Down Counter",
     difficulty: "medium",
     category: "Counters",
@@ -282,7 +282,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p023",
+    id: "p025",
     title: "4-bit Binary Up Counter",
     difficulty: "medium",
     category: "Counters",
@@ -342,7 +342,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p024",
+    id: "p026",
     title: "4-bit Binary Down Counter",
     difficulty: "medium",
     category: "Counters",
@@ -402,7 +402,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p025",
+    id: "p027",
     title: "4-bit Up-Down Counter",
     difficulty: "hard",
     category: "Counters",
@@ -475,7 +475,7 @@ endmodule`,
 endmodule`
   },
   {
-    id: "p026",
+    id: "p028",
     title: "BCD Counter",
     difficulty: "hard",
     category: "Counters",
@@ -543,7 +543,7 @@ endmodule`,
 endmodule`
   },
 {
-  id: "p027",
+  id: "p029",
   title: "4-bit Ring Counter",
   difficulty: "hard",
   category: "Counters",
@@ -611,7 +611,7 @@ endmodule`,
 endmodule`
 },
 {
-  id: "p028",
+  id: "p030",
   title: "4-bit Johnson Counter",
   difficulty: "hard",
   category: "Counters",

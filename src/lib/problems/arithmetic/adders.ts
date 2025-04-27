@@ -5,7 +5,7 @@ export const adderProblems: Problem[] = [
     id: "p009",
     title: "Half Adder",
     difficulty: "easy",
-    category: "Combinational Circuits",
+    category: "Arithmetic Circuits",
     points: 10,
     description: `
 Design a half adder circuit using Verilog.
@@ -71,7 +71,7 @@ endmodule`
     id: "p010",
     title: "Full Adder",
     difficulty: "easy",
-    category: "Combinational Circuits",
+    category: "Arithmetic Circuits",
     points: 10,
     description: `
 Design a full adder circuit using Verilog.
@@ -155,4 +155,4 @@ endmodule`,
   end
 endmodule`
   }
-];
+]; 

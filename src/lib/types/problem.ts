@@ -1,6 +1,5 @@
-
 export interface Problem {
-  points: ReactNode;
+  points: number;
   id: string;
   title: string;
   difficulty: 'easy' | 'medium' | 'hard';

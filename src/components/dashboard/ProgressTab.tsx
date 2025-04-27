@@ -7,7 +7,6 @@ import { flipFlopProblems } from "@/lib/problems/flipflops";
 import { counterProblems } from "@/lib/problems/counters";
 import { registerProblems } from "@/lib/problems/registers";
 import { stateMachineProblems } from "@/lib/problems/state-machines";
-import { subtractorProblems } from "@/lib/problems/combinational/subtractors";
 import { SemiCircularProgress } from "./SemiCircularProgress";
 
 interface ProgressTabProps {
@@ -29,7 +28,6 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
     ...counterProblems,
     ...registerProblems,
     ...stateMachineProblems,
-    ...subtractorProblems,
   ];
 
   const totalProblems = allProblems.length;

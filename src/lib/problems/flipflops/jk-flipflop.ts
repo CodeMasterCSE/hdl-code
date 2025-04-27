@@ -2,7 +2,7 @@ import { Problem } from '../../types/problem';
 
 export const jkFlipFlopProblems: Problem[] = [
   {
-    id: "p018",
+    id: "p020",
     title: "JK Flip-Flop Implementation",
     difficulty: "medium",
     category: "Flip Flops",
