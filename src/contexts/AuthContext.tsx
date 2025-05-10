@@ -16,23 +16,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+    try {
+      // Set up auth state listener
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setSession(session)
+          setUser(session?.user ?? null)
+          setLoading(false)
+        }
+      )
+
+      // Check for existing session
+      supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session)
         setUser(session?.user ?? null)
         setLoading(false)
-      }
-    )
+      })
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
+      return () => subscription.unsubscribe()
+    } catch (error) {
+      console.error('Error initializing auth:', error)
       setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+    }
   }, [])
 
   return (

@@ -18,17 +18,21 @@ export function ModeProvider({ children }: { children: React.ReactNode }) {
   // Load saved mode preference
   useEffect(() => {
     const loadMode = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('mode_preference')
-          .eq('id', user.id)
-          .single()
-        
-        if (profile?.mode_preference) {
-          setModeState(profile.mode_preference)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('mode_preference')
+            .eq('id', user.id)
+            .single()
+          
+          if (profile?.mode_preference) {
+            setModeState(profile.mode_preference)
+          }
         }
+      } catch (error) {
+        console.error('Error loading mode preference:', error)
       }
     }
     loadMode()
@@ -49,24 +53,24 @@ export function ModeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [mode])
 
-  // Update resolved mode when mode changes
-  useEffect(() => {
-    if (mode === 'system') {
-      setResolvedMode(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    } else {
-      setResolvedMode(mode)
-    }
-  }, [mode])
-
-  // Save mode preference to database
   const setMode = async (newMode: Mode) => {
-    setModeState(newMode)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      await supabase
-        .from('profiles')
-        .update({ mode_preference: newMode })
-        .eq('id', user.id)
+    try {
+      setModeState(newMode)
+      if (newMode === 'system') {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+        setResolvedMode(mediaQuery.matches ? 'dark' : 'light')
+      } else {
+        setResolvedMode(newMode)
+      }
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        await supabase
+          .from('profiles')
+          .upsert({ id: user.id, mode_preference: newMode })
+      }
+    } catch (error) {
+      console.error('Error setting mode:', error)
     }
   }
 

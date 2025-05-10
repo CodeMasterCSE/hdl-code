@@ -1,18 +1,16 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import { CircuitBoard, BookOpen, PuzzleIcon, ChevronDown, Github, BookMarked, User, LogOut } from "lucide-react";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { CircuitBoard, BookOpen, PuzzleIcon, Github, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -22,7 +20,9 @@ const NavBar = () => {
       toast.error(error.message);
     }
   };
-  return <div className="border-b bg-background sticky top-0 z-50">
+
+  return (
+    <div className="border-b bg-background sticky top-0 z-50">
       <div className="container flex h-16 items-center px-4 sm:px-6">
         <Link to="/" className="flex items-center space-x-2">
           <CircuitBoard className="h-10 w-10 text-blue-600" />
@@ -41,57 +41,12 @@ const NavBar = () => {
             </NavigationMenuItem>
             
             <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <BookOpen className="mr-2 h-4 w-4" />
-                Learn
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <Link to="/learn/hdl-basics" className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-100 to-blue-50 p-6 no-underline outline-none focus:shadow-md">
-                        <BookMarked className="h-6 w-6 text-blue-500" />
-                        <div className="mb-2 mt-4 text-lg font-medium">
-                          HDL Fundamentals
-                        </div>
-                        <p className="text-sm leading-tight text-muted-foreground">
-                          Learn the basics of hardware description languages and digital circuit design.
-                        </p>
+                <Link to="/learning" className={navigationMenuTriggerStyle()}>
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Learn
                       </Link>
                     </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/learn/verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">Verilog</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          Master Verilog HDL with tutorials and examples
-                        </p>
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/learn/vhdl" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">VHDL</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          VHDL language reference and practice
-                        </p>
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/learn/system-verilog" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <div className="text-sm font-medium leading-none">SystemVerilog</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          Advanced concepts in SystemVerilog
-                        </p>
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                </ul>
-              </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -109,7 +64,8 @@ const NavBar = () => {
             </Button>
           </a>
           
-          {user ? <>
+          {user ? (
+            <>
               <Link to="/dashboard">
                 <Button variant="outline">Dashboard</Button>
               </Link>
@@ -117,16 +73,21 @@ const NavBar = () => {
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
-            </> : <>
+            </>
+          ) : (
+            <>
               <Link to="/login">
                 <Button variant="outline">Sign In</Button>
               </Link>
               <Link to="/register">
                 <Button>Register</Button>
               </Link>
-            </>}
+            </>
+          )}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default NavBar;

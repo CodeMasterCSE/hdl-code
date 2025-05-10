@@ -50,13 +50,13 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {statsLoading ? (
+        {statsLoading ? (
             <div className="animate-pulse space-y-4">
               <div className="h-4 bg-muted rounded w-3/4" />
               <div className="h-2 bg-muted rounded" />
             </div>
-          ) : (
-            <>
+        ) : (
+          <>
               <div className="flex justify-center mb-8">
                 <SemiCircularProgress
                   easy={problemStats.easy}
@@ -78,8 +78,8 @@ export const ProgressTab = ({ statsLoading, problemStats, navigate }: ProgressTa
                   <span className="text-red-500 ml-1">{problemStats.hard}/{difficultyCounts.hard} Hard</span>
                 </div>
               </div>
-            </>
-          )}
+          </>
+        )}
         </CardContent>
       </Card>
     </div>

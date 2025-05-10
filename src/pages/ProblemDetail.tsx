@@ -3,6 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import NavBar from "@/components/NavBar";
 import { sampleProblems } from "@/lib/problems";
+import { flipFlopProblems } from "@/lib/problems/flipflops";
+import { counterProblems } from "@/lib/problems/counters";
+import { registerProblems } from "@/lib/problems/registers";
+import { stateMachineProblems } from "@/lib/problems/state-machines";
 import { Play, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,8 +46,17 @@ const ProblemDetail = () => {
   }, [user, loading, navigate, id]);
 
   useEffect(() => {
+    // Combine all problem collections
+    const allProblems = [
+      ...sampleProblems,
+      ...flipFlopProblems,
+      ...counterProblems,
+      ...registerProblems,
+      ...stateMachineProblems
+    ];
+
     // Find the problem based on the ID from the URL
-    const foundProblem = sampleProblems.find(p => p.id === id);
+    const foundProblem = allProblems.find(p => p.id === id);
     
     if (foundProblem) {
       console.log("Problem found:", foundProblem.id);

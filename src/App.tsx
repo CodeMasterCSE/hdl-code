@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Learning from "./pages/Learning";
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ModeProvider } from '@/contexts/ModeContext'
 import { useMode } from '@/contexts/ModeContext'
@@ -38,6 +39,7 @@ function AppContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/learning" element={<Learning />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

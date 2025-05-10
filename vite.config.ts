@@ -7,7 +7,14 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   },
   plugins: [
     react(),
@@ -17,6 +24,15 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  optimizeDeps: {
+    include: ['lucide-react', 'react-markdown'],
+    exclude: ['@radix-ui/react-icons']
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
     },
   },
 }));
